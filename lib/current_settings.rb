@@ -47,7 +47,7 @@ class Current
   end
 
   def end_date
-    e = Date.parse(@values[:end_date])
+    e = Date.parse(@values[:end_date]) rescue Date.today
     if e < start_date || (start_date + 50) < e
       Date.today
     else

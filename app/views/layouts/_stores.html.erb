@@ -1,4 +1,3 @@
 <div data-controller="stores">
   <span data-target="stores.current" data-json="<%= @current.to_h.to_json %>"></span>
-  <span data-target="stores.schedules" data-json="<%= current_user.organization.schedules_by_range(nil, nil).to_json %>"></span>
 </div>

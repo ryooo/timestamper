@@ -5,13 +5,14 @@ import pluralize from 'pluralize'
 import { JSONFetch } from 'shared/utilities/json_fetch'
 
 export default class Store {
-  @observable collection = []
+  collection = []
   columns = {}
   modelClass = null
   modelName = null
   order = null
   searchQuery = null
   sort = null
+  @observable loadedAt = null;
 
   @action createModel(rowJson) {
     const model = new this.modelClass(rowJson)
@@ -21,6 +22,12 @@ export default class Store {
 
   @action createCollection(rowsJson) {
     rowsJson.forEach(rowJson => this.createModel(rowJson))
+  }
+
+  @action reloadCollection(rowsJson) {
+    this.reset()
+    rowsJson.forEach(rowJson => this.createModel(rowJson))
+    this.loadedAt = Date.now()
   }
 
   @action destroyModel(modelId) {

@@ -1,24 +1,38 @@
-# README
+## タイムスタンプ
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+超シンプルな勤怠管理
+  QRコードで打刻
+  グループごとに予定組める
 
-Things you may want to cover:
+データ活用方法が多彩
+  集計
+    回数/人 => 利用頻度
+    時間/人 => 利用量
+    人/時間帯 => 混雑度
+    時間/時間帯&人 => 給与計算用
+    出席/欠席 一覧表示
 
-* Ruby version
+QRコード読み込み
+  予実が見れる
 
-* System dependencies
+## 画面
+ホーム
+  打刻
+  履歴 => 打刻修正
 
-* Configuration
+お客様
+  ダッシュボード
+  一覧
+  打刻履歴
+    csv
 
-* Database creation
+スタッフ
+  ダッシュボード
+  一覧
+  打刻履歴
+    csv
 
-* Database initialization
+グループ
+  一覧
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+組織設定

@@ -39,7 +39,6 @@ export default class extends Controller {
   }
 
   replaceForm(newForm, refreshForm) {
-    if (this._flashMessageController) this._flashMessageController.removeAllMessages()
     if (newForm) {
       if (refreshForm) {
         this._replaceRefreshWrappers(newForm)

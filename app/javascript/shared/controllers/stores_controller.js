@@ -1,24 +1,28 @@
 import { Controller } from 'stimulus'
 import { action, computed, observable } from 'mobx'
 import Current from 'shared/stores/current'
-import Schedules from 'shared/stores/schedules'
+import Stamps from 'shared/stores/stamps'
 
 export default class extends Controller {
   static targets = [
-    'schedules',
-    'current'
+    'current',
+    'stamps',
   ]
   connect() {
-    window.current.setJson(JSON.parse(this.currentTarget.dataset["json"]))
-    schedules.createCollection(JSON.parse(this.schedulesTarget.dataset["json"]))
+    if (this.hasCurrentTarget) {
+      window.current.setJson(JSON.parse(this.currentTarget.dataset["json"]))
+    }
+    if (this.hasStampsTarget) {
+      window.stamps.reloadCollection(JSON.parse(this.stampsTarget.dataset["json"]))
+    }
   }
 }
 
 window.current = new Current
-window.schedules = new Schedules
+window.stamps = new Stamps
 
 window.resetStores = () => {
-  window.schedules.reset()
+  window.stamps.reset()
 }
 
 $(document).on('turbolinks:visit', event => {

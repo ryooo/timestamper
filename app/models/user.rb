@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   include EnumMethodGenerator
   enum_methods :user_type, :notification_type
   serialize :position_ids
+  before_create :generate_code
 
   validates_presence_of :name
   validates_length_of :name, maximum: 10
@@ -23,6 +24,14 @@ class User < ActiveRecord::Base
 
   def organization
     @organization ||= Organization.find_by(code: self.organization_code)
+  end
+
+  def stamps_of(date)
+    Stamp.where(user_id: self.id, in_on: date)
+  end
+
+  def generate_code
+    self.code ||= Digest::SHA1.hexdigest(self.id.to_s + "SALT_ICED_COFFEE")
   end
 
   def self.reset_password_keys
