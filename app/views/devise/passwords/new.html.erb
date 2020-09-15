@@ -1,0 +1,47 @@
+
+<%= form_with(
+  url: password_path(resource_name),
+  scope: :user,
+  id: "main-form",
+  class: "basic-wrap large",
+  data: {
+    controller: "forms",
+    action: "forms#submit ajax:error->forms#ajaxError ajax:success->forms#ajaxSuccess"
+  }) do |f| %>
+
+  <% pp params %>
+
+  <div class="basic-header">
+    <h3 class="title">パスワードを忘れましたか？</h3>
+    <p class="start">メールアドレスを入力いただければ、パスワード再設定用のリンクを送ります。</p>
+  </div>
+  <hr>
+
+  <div class="form-group">
+    <%= f.label :organization_code, :"組織コード" %>
+    <%= f.text_field :organization_code,
+      autocomplete: "shifter-organization_code",
+      value: params[:user].try(:[], :organization_code),
+      class: "form-control",
+      placeholder: "例) abcdef12",
+      autofocus: true %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :email, :"メールアドレス" %>
+    <%= f.text_field :email,
+      autocomplete: "email",
+      value: params[:user].try(:[], :email),
+      class: "form-control",
+      placeholder: "例) ○○@gmail.com",
+      autofocus: true %>
+  </div>
+
+  <% if params[:show_checkbox_recaptcha] %>
+    <%= recaptcha_tags site_key: Settings.google.recaptcha.v2.sitekey %>
+  <% else %>
+    <%= recaptcha_v3(action: 'password_reset', site_key: Settings.google.recaptcha.v3.sitekey) %>
+  <% end %>
+
+  <button type="submit" data-action="forms#submit" data-target="forms.submitButton" class="btn btn-blue btn-lg btn-block">パスワード再設定用のリンクを送る</button>
+<% end %>

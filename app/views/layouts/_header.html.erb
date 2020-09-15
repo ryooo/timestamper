@@ -1,0 +1,19 @@
+<% if current_user.organization.trial? %>
+  <a class="banner notice" data-controller="links" data-action="links#click" data-links-remote-modal="pane" data-remote="true" href="/41999/subscription/edit">⏰トライアルは残り<%= current_user.organization.trial_rest_str %>です。アップグレードすればこのままお使いいただけます。<button class="btn btn-outline-success btn-sm">アップグレード</button></a>
+<% end %>
+
+<header class="header">
+  <div class="header-menu left"></div>
+  <div class="header-menu center">
+    <a data-controller="links" data-action="links#click" href="/users/"><i class="fas fa-home"></i>ホーム</a>
+    <a data-controller="links" data-action="links#click" href="/shifts/"><i class="fas fa-calendar-alt"></i>シフト</a>
+    <a data-controller="links" data-action="links#click" href="/requests/"><i class="fas fa-praying-hands"></i>要望</a>
+    <a data-controller="links" data-action="links#click" href="/timesheets/"><i class="fas fa-clock"></i>打刻</a>
+    <a data-controller="links" data-action="links#click" href="/organizations/"><i class="fas fa-cog"></i>組織設定</a>
+  </div>
+  <div class="header-menu right">
+    <div class="dropdown"><a data-toggle="dropdown" data-target="#" class="hide-caret" href="javascript:void(0);"><span class="avatar" data-controller="color-circles" data-bg-color="#<%= current_user.color %>" data-fg-color="<%= current_user.foreground_color %>">RM</span></a><div class="dropdown-menu dropdown-menu-right"><div class="dropdown-menu-inner"><a data-controller="links" data-action="links#click" data-links-modal="pane" data-remote="true" href="/users/1/edit"><i class="fas fa-user-circle"></i>個人設定</a>
+    <a data-controller="links" data-action="links#click" href="/users/sign_out" data-method="delete"><i class="fas fa-power-off"></i>ログアウト</a>
+    </div></div></div>
+  </div>
+</header>

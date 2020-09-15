@@ -1,0 +1,42 @@
+
+<%= form_with(
+  url: tutorial_locations_path,
+  id: "main-form",
+  class: "basic-wrap",
+  data: {
+    controller: "forms",
+    action: "forms#submit ajax:error->forms#ajaxError ajax:success->forms#ajaxSuccess"
+  }) do |f| %>
+
+  <div class="basic-header">
+    <h3 class="title">拠点を登録してください</h3>
+    <p class="start">
+      <div>あなたの組織にはいくつ拠点がありますか？</div>
+      <div>店舗や事務所を複数持っている場合は登録して便利に使えます。</div>
+      <div>拠点が1つの場合は登録しないで次に進んでください。</div>
+    </p>
+    <p class="start"><div>登録・更新はあとからでも行えますのでご安心ください。</div></p>
+  </div>
+
+  <hr>
+
+  <div class="positions" data-controller="row-duplicator">
+    <%= f.label :location_name, :"拠点の名前" %>
+    <% ["渋谷店", "新宿店", "○○店"].each_with_index do |placeholder, i| %>
+      <div class="form-row" data-target="row-duplicator.<%= i == 2 ? 'copyRow' : 'row' %>">
+        <div class="form-group">
+          <%= f.text_field :location_name,
+            name:"locations[][name]",
+            class: "form-control",
+            placeholder: "例) #{placeholder}" %>
+        </div>
+      </div>
+    <% end %>
+    <a data-action="row-duplicator#addRow links#click" data-controller="links" href="javascript:void(0);">行を追加する</a>
+    
+    <div class="text-center">
+      <button type="submit" class="btn btn-blue btn-lg" data-target="forms.submitButton">次に進む</button>
+    </div>
+  </div>
+
+<% end %>

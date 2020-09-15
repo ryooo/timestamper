@@ -1,0 +1,100 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+# encoding: utf-8
+# bundle exec ridgepole --config config/database.yml --file db/Schemafile --apply
+
+
+create_table :organizations, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  t.string   :name
+  t.string   :code
+  t.integer  :payment_type_id, default: 1
+  t.time     :day_change_time, comment: "切り替え時間"
+  t.datetime :trial_end_at
+
+  t.string   :color
+
+  # footer
+  t.datetime :created_at
+  t.datetime :updated_at
+end
+add_index :organizations, ["id"], name: "id_index", using: :btree
+add_index :organizations, ["code"], name: "code_index", using: :btree
+add_index :organizations, ["name"], name: "name_index", using: :btree
+
+
+create_table :users, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  t.string   :name
+  t.string   :organization_code
+  t.integer  :user_type_id, default: 1
+  t.string   :phone_number
+  t.datetime :joined_at
+  t.integer  :notification_type_id, default: 1
+  t.text     :position_ids
+
+  t.string   :color
+
+  ## Devise
+  t.string   :email
+  t.string   :encrypted_password
+  t.string   :reset_password_token
+  t.datetime :reset_password_sent_at
+  t.datetime :remember_created_at
+
+  ## omniauth
+  t.string   :provider
+  t.string   :uid
+  t.string   :username
+
+  # footer
+  t.datetime :created_at
+  t.datetime :updated_at
+end
+add_index :users, ["name"], name: "name_index", using: :btree
+add_index :users, ["organization_code", "email"], name: "organization_code_email_index", using: :btree, unique: true
+add_index :users, ["reset_password_token"], name: "reset_password_token_index", using: :btree, unique: true
+
+create_table :locations, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  t.bigint   :organization_id
+  t.string   :name
+  t.integer  :order_num
+
+  t.string   :color
+
+  # footer
+  t.datetime :created_at
+  t.datetime :updated_at
+end
+add_index :locations, ["organization_id"], name: "organization_id_index", using: :btree
+add_foreign_key :locations, "organizations", name: "locations_organizations_fk"
+
+
+create_table :schedules, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  t.bigint   :organization_id
+  t.bigint   :user_id
+  t.string   :type
+  t.integer  :location_id
+  t.datetime :in_at
+  t.datetime :out_at
+
+  # footer
+  t.datetime :created_at
+  t.datetime :updated_at
+end
+add_index :schedules, ["organization_id"], name: "organization_id_index", using: :btree
+add_foreign_key :schedules, "organizations", name: "schedules_organizations_fk"
+
+
+create_table :stamps, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  t.bigint   :organization_id
+  t.bigint   :user_id
+  t.integer  :location_id
+  t.datetime :in_at
+  t.datetime :out_at
+
+  # footer
+  t.datetime :created_at
+  t.datetime :updated_at
+end
+add_index :stamps, ["organization_id"], name: "organization_id_index", using: :btree
+add_foreign_key :stamps, "organizations", name: "stamps_organizations_fk"
+

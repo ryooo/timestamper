@@ -1,0 +1,55 @@
+<form id="update_user_form" data-controller="forms" data-action="forms#submit ajax:error->forms#ajaxError ajax:success->forms#ajaxSuccess" action="/profile?type=general" accept-charset="UTF-8" data-remote="true" method="post"><input type="hidden" name="_method" value="patch" /><input type="hidden" name="authenticity_token" value="hvz2Sai1/fH/C+rC+Hi9QlcV1HairrKU5KsixVKNosR/5R9N9D7yiCTFWE04Eh2mdCo526pMyT8ajAd6LgbaQw==" /><div class='modal-header'>Edit Profile</div>
+  <div class='modal-body'>
+  <div class="form-group"><label for="user_name">Full Name</label><input placeholder="e.g. Joe Smith" class="form-control" type="text" value="Ryo Matsumura" name="user[name]" id="user_name" /></div>
+  <div class="form-group"><label for="user_email">Email</label><input pattern="^[a-z0-9][a-z0-9._%+-]+[a-z0-9_]@[a-z0-9.-]+\\.[a-z]{2,}$" placeholder="e.g. joe@gmail.com" class="form-control" type="email" value="ryooo.321@gmail.com" name="user[email]" id="user_email" /></div>
+  <div class="form-group"><label for="user_phone">Mobile Phone Number</label><div class="input-group"><select default_country="81" wrapper="false" style="max-width: 150px" class="form-control" name="user[phone_cc]" id="user_phone_cc"><option value="1">+1 USA/Canada</option>
+  <option value="61">+61 Australia</option>
+  <option value="44">+44 United Kingdom</option>
+  <option value="64">+64 New Zealand</option>
+  <option value="353">+353 Ireland</option>
+  <option value="41">+41 Switzerland</option>
+  <option value="47">+47 Norway</option>
+  <option value="852">+852 Hong Kong</option>
+  <option value="31">+31 Netherlands</option>
+  <option value="1787">+1787 Puerto Rico</option>
+  <option value="358">+358 Finland</option>
+  <option value="40">+40 Romania</option>
+  <option value="46">+46 Sweden</option>
+  <option value="351">+351 Portugal</option>
+  <option value="60">+60 Malaysia</option>
+  <option value="45">+45 Denmark</option>
+  <option value="32">+32 Belgium</option>
+  <option value="599">+599 Sint Maarten (Dutch part)</option>
+  <option value="65">+65 Singapore</option>
+  <option value="972">+972 Isreal</option>
+  <option value="56">+56 Chile</option>
+  <option value="34">+34 Spain</option>
+  <option value="354">+354 Iceland</option>
+  <option value="965">+965 Kuwait</option>
+  <option value="599">+599 Curacao</option>
+  <option value="55">+55 Brazil</option>
+  <option value="33">+33 France</option>
+  <option value="49">+49 Germany</option>
+  <option value="506">+506 Costa Rica</option>
+  <option value="52">+52 Mexico</option>
+  <option value="1242">+1242 Bahamas</option>
+  <option value="670">+670 East Timor</option>
+  <option value="386">+386 Slovenia</option>
+  <option value="48">+48 Poland</option>
+  <option value="39">+39 Italy</option>
+  <option value="30">+30 Greece</option>
+  <option value="1441">+1441 Bermuda</option>
+  <option value="1345">+1345 Cayman Islands</option>
+  <option value="299">+299 Greenland</option>
+  <option selected="selected" value="81">+81 Japan</option>
+  <option value="90">+90 Turkey</option>
+  <option value="876">+876 Jamaica</option>
+  <option value="91">+91 India</option></select><div class="input-group-prepend input-group-append"><div class="input-group-text">-</div></div><input default_country="81" placeholder="e.g. 4145559034" class="form-control" type="tel" value="8034574819" name="user[phone]" id="user_phone" /></div></div>
+  <div class="form-group"><label for="user_password">Password</label><input placeholder="e.g. •••••••" class="form-control" type="password" name="user[password]" id="user_password" /><div class="form-text">Your password must be at least 6 characters long.</div></div>
+  <div class="form-group"><label for="user_password_confirmation">Password Confirmation</label><input placeholder="e.g. ••••••••" class="form-control" type="password" name="user[password_confirmation]" id="user_password_confirmation" /></div>
+  </div>
+
+<div class='modal-footer'>
+  <button type="submit" class="btn btn-blue" data-target="forms.submitButton">Save Profile</button>
+  </div>
+</form>

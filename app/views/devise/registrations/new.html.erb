@@ -1,0 +1,71 @@
+
+<%= form_with(
+  url: users_path,
+  scope: :user,
+  id: "main-form",
+  class: "basic-wrap large",
+  data: {
+    controller: "registration-form forms",
+    action: "forms#submit ajax:error->forms#ajaxError ajax:success->forms#ajaxSuccess"
+  }) do |f| %>
+
+  <div class="basic-header">
+    <h3 class="title">アカウント登録</h3>
+    <p class="start">すでにアカウントをお持ちの方は<%= link_to "ログイン", new_session_path(resource_name) %>をお願いします。</p>
+  </div>
+  <hr>
+
+  <div class="form-group">
+    <%= label_tag :organization_name, :"組織名*" %>
+    <% field = text_field_tag :organization_name, params[:organization_name],
+      autocomplete: "company",
+      class: :"form-control",
+      placeholder: "例) ○○カフェ",
+      autofocus: true %>
+    <%= validate_error_tag(@organization, :name, field) %>
+  </div>
+  
+  <hr>
+
+  <div class="form-group">
+    <%= f.label :name, :"名前*" %>
+    <%= f.text_field :name,
+      autocomplete: "name",
+      value: params[:user].try(:[], :name),
+      class: :"form-control",
+      placeholder: "例) 山田 太郎" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :email, :"メールアドレス*" %>
+    <%= f.text_field :email,
+      autocomplete: "email",
+      value: params[:user].try(:[], :email),
+      class: :"form-control",
+      placeholder: "例) ○○@gmail.com" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :password, :"パスワード*" %>
+    <%= f.password_field :password,
+      autocomplete: :"new-password",
+      class: :"form-control",
+      placeholder: "6文字以上の英数字",
+      style: "background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACIUlEQVQ4EX2TOYhTURSG87IMihDsjGghBhFBmHFDHLWwSqcikk4RRKJgk0KL7C8bMpWpZtIqNkEUl1ZCgs0wOo0SxiLMDApWlgOPrH7/5b2QkYwX7jvn/uc//zl3edZ4PPbNGvF4fC4ajR5VrNvt/mo0Gr1ZPOtfgWw2e9Lv9+chX7cs64CS4Oxg3o9GI7tUKv0Q5o1dAiTfCgQCLwnOkfQOu+oSLyJ2A783HA7vIPLGxX0TgVwud4HKn0nc7Pf7N6vV6oZHkkX8FPG3uMfgXC0Wi2vCg/poUKGGcagQI3k7k8mcp5slcGswGDwpl8tfwGJg3xB6Dvey8vz6oH4C3iXcFYjbwiDeo1KafafkC3NjK7iL5ESFGQEUF7Sg+ifZdDp9GnMF/KGmfBdT2HCwZ7TwtrBPC7rQaav6Iv48rqZwg+F+p8hOMBj0IbxfMdMBrW5pAVGV/ztINByENkU0t5BIJEKRSOQ3Aj+Z57iFs1R5NK3EQS6HQqF1zmQdzpFWq3W42WwOTAf1er1PF2USFlC+qxMvFAr3HcexWX+QX6lUvsKpkTyPSEXJkw6MQ4S38Ljdbi8rmM/nY+CvgNcQqdH6U/xrYK9t244jZv6ByUOSiDdIfgBZ12U6dHEHu9TpdIr8F0OP692CtzaW/a6y3y0Wx5kbFHvGuXzkgf0xhKnPzA4UTyaTB8Ph8AvcHi3fnsrZ7Wore02YViqVOrRXXPhfqP8j6MYlawoAAAAASUVORK5CYII='); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :password_confirmation, :"パスワード(確認)*" %>
+    <%= f.password_field :password_confirmation,
+      class: :"form-control",
+      placeholder: "同じパスワードを入力してください" %>
+  </div>
+
+  <% if params[:show_checkbox_recaptcha] %>
+    <%= recaptcha_tags site_key: Settings.google.recaptcha.v2.sitekey %>
+  <% else %>
+    <%= recaptcha_v3(action: 'user_create', site_key: Settings.google.recaptcha.v3.sitekey) %>
+  <% end %>
+
+  <button type="submit" data-action="session-forms#submit" data-target="forms.submitButton" class="btn btn-blue btn-lg btn-block">14日間の無料トライアルを始める</button>
+<% end %>

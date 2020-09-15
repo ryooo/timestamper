@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shifter</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'desktop', 'data-turbolinks-track': 'reload' %>
+  </head>
+  <body class="basic">
+    <div class="page-container">
+      <%= render partial: "layouts/tutorial_header" %>
+      <div class="page-body">
+        <%= yield %>
+      </div>
+      <%= render partial: "layouts/footer" %>
+      <%= render partial: "layouts/flash_messages" %>
+    </div>
+  </body>
+</html>

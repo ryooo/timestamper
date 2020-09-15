@@ -1,0 +1,49 @@
+<%= render partial: "navi" %>
+
+<div class="page-body">
+  <div class="calendar-wrapper loading-hidden">
+    <div class="calendar-header">
+      <% if @current.term == :month %>
+        <% '日月火水木金土'.chars.each do |str| %>
+          <div class="cell">
+            <div class="date <%= calender_color_class(str) %>"><%= str %></div>
+          </div>
+        <% end %>
+      <% else %>
+        <% @calender.first.each do |day| %>
+          <div class="cell">
+            <div class="date <%= day.today? ? 'today' : calender_color_class(day) %>"><%= day.to_s(:jp_mdw) %><div class="holiday-name"><%= day.holiday_name %></div></div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="calendar">
+      <% @calender.each do |week| %>
+        <div class="calendar-row">
+          <% week.each do |day| %>
+            <div class="cell month-padding">
+              <% if @current.term == :month %>
+                <div class="date-header">
+                  <div class="date <%= day.today? ? 'today' : calender_color_class(day) %>"><span class="holiday-name"><%= day.holiday_name.try(:<<, " - ") %></span><%= day.day == 1 ? day.to_s(:m_d) : day.day %></div>
+                </div>
+              <% end %>
+              
+              <div class="schedules-cell" data-action="click->schedules-cell#newModel" data-controller="schedules-cell" data-schedules-cell-date="<%= day.to_s(:y_m_d) %>">
+                <a data-controller="model-wrapper" data-target="mobile-pull-to-refresh.observable" data-action="model-wrapper#click" class="filtered schedule-cell schedule" data-id="31947923" data-model-wrapper-model-name="schedule" data-tooltip="" style="">
+                  <i class="color-border" style="background:#8a8a48"></i>
+                  <div class="heading">
+                    <div class="title">9am - 5pm</div>
+                    <div class="indicators">
+                      <i class="icon-info-circle" data-tooltip="Example note"></i></div>
+                  </div>
+                  <div class="details">Ryo Matsumura • ホール</div>
+                </a>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

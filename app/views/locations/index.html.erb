@@ -1,0 +1,37 @@
+
+<%= form_with(
+  url: locations_path,
+  scope: :location,
+  id: "main-form",
+  class: "basic-wrap",
+  data: {
+    controller: "forms",
+    action: "forms#submit ajax:error->forms#ajaxError ajax:success->forms#ajaxSuccess"
+  }) do |f| %>
+
+  <div class="basic-header">
+    <h3 class="title">拠点 一覧</h3>
+    <p class="start">あなたの組織にはいくつ拠点がありますか？<br>事務所や店舗を複数持っている場合は拠点の名前を入力して下さい。</p>
+    <p class="start">登録・更新はあとからでも行えますのでご安心ください。</p>
+  </div>
+
+  <hr>
+
+  <div class="positions" data-controller="row-duplicator">
+    <div class="form-row" data-target="row-duplicator.row">
+      <div class="form-group">
+        <%= f.label :location_name, :"拠点の名前" %>
+        <%= f.text_field :location_name,
+          name:"locations[][name]",
+          class: "form-control",
+          placeholder: "例) 渋谷店" %>
+      </div>
+    </div>
+    <a data-action="row-duplicator#addRow helpers--links#click" data-controller="helpers--links" href="javascript:void(0);">Add more</a>
+    
+    <div class="text-center">
+      <button type="submit" class="btn btn-blue btn-lg" data-target="helpers--forms.submitButton">Next Step</button>
+    </div>
+  </div>
+
+<% end %>
