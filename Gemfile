@@ -74,3 +74,5 @@ gem 'omniauth-twitter'
 gem "recaptcha"
 
 gem 'jquery-rails'
+
+gem 'geocoder'

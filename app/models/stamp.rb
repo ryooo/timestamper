@@ -32,7 +32,7 @@ class Stamp < ActiveRecord::Base
 
   def total_sec
     first = self.timeframe_rows.map(&:in_at).min
-    last = self.timeframe_rows.map(&:out_at).min rescue Time.current
+    last = self.timeframe_rows.map(&:out_at).min || Time.current
     last - first
   end
 

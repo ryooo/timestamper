@@ -3660,6 +3660,8 @@ div.schedule-cell.timesheet {
 
       &:after {
         line-height: 38px;
+        font-family: "Font Awesome 5 Free";
+        content: "\f017";
       }
 
       &:active, &:focus, &:hover {

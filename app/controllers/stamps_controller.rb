@@ -22,4 +22,8 @@ class StampsController < ApplicationController
     end
     render plain: "ok"
   end
+
+  def update
+    render plain: "ok"
+  end
 end

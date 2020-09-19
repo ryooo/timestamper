@@ -6,6 +6,7 @@ module ApplicationHelper
       Time.at(sec).utc.strftime("%-M分")
     end
   end
+  
   def timeframe_style(timeframe)
     left = timeframe_margin(timeframe.in_at, timeframe.date.beginning_of_day + 4.hours)
     right = timeframe_margin(timeframe.date.end_of_day + 4.hours, timeframe.out_at)

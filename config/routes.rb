@@ -24,6 +24,9 @@ Rails.application.routes.draw do
   resources :dashboard, only: [
     :index,
   ]
-  get "stamp" => "stamps#execute"
-  post "stamp" => "stamps#execute"
+  scope :stamp, as: :stamp do
+    get "/" => "stamps#execute"
+    post "/" => "stamps#execute"
+    post "update" => "stamps#update"
+  end
 end
