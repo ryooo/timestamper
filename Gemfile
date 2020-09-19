@@ -72,3 +72,5 @@ gem 'time_difference'
 gem 'devise'
 gem 'omniauth-twitter'
 gem "recaptcha"
+
+gem 'jquery-rails'
