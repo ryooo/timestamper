@@ -1,5 +1,11 @@
-<div class='flash-messages-wrapper' data-controller='flash-messages'></div>
-
+<div class='flash-messages-wrapper' data-controller='flash-messages'>
+  <% pp flash %>
+  <% flash.each do |k, v| %>
+    <% if v.is_a?(::Hash) %>
+      <a class="flash-message <%= v["type"] %> visible" data-action="flash-messages#removeMessage" data-target="flash-messages.message"><i class="fas <%= v["icon"] %>"></i><div class="message"><%= v["message"] %></div></a>
+    <% end %>
+  <% end %>
+</div>
 <template id="flash-message-template">
   <a class="flash-message ${ type } visible" data-action="flash-messages#removeMessage" data-target="flash-messages.message"><i class="fas ${ icon }"></i><div class="message">${ message }</div></a>
 </template>

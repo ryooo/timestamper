@@ -5,7 +5,6 @@ require("timepicker");
 require('../scss/application.scss');
 require("@fortawesome/fontawesome-free/js/solid");
 
-
 require('../shared/initializers/rails_initializer.js');
 require('../shared/initializers/moment_initializer.js');
 require('../shared/initializers/turbolinks_initializer.js');

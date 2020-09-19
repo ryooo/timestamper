@@ -13,7 +13,7 @@
   <hr>
   <div class="text-center">
     <div class="btn-group w-100">
-      <% if @stamp&.active? %>
+      <% if @current_stamp&.active? %>
         <button type="submit" class="btn btn-secondary btn-lg disabled" data-target="forms.submitButton">開始</button>
         <button type="submit" class="btn btn-primary btn-lg ml-4" data-target="forms.submitButton">終了</button>
       <% else %>
@@ -22,207 +22,70 @@
       <% end %>
     </div>
   </div>
-  <div data-controller="stores">
-    <span data-target="stores.stamps" data-json="<%= current_user.stamps_of(Date.today).to_json %>"></span>
-  </div>
-  
 <% end %>
 
-<div data-controller="viewer">
-  <div class="page-filters" data-controller="page-filters">
-    <div class="rendition-types">
-      <div class="dropdown">
-        <a data-toggle="dropdown" data-target="#" data-controller="links" data-action="links#click" href="javascript:void(0);">
-          <i class="icon-users"></i>Team Member Grid
-        </a>
-        <div class="dropdown-menu">
-          <div class="dropdown-menu-inner">
-            <a data-controller="links" data-action="links#click" href="#"><i class="icon-users"></i>Team Member Grid</a>
-            <a data-controller="links" data-action="links#click" href="#"><i class="icon-flag"></i>Position Grid</a>
-            <a data-controller="links" data-action="links#click" href="#"><i class="icon-map-marker-alt"></i>Location Grid</a>
-            <a data-controller="links" data-action="links#click" href="#"><i class="icon-calendar-alt"></i>Calendar</a>
-            <a data-controller="links" data-action="links#click" href="#"><i class="icon-list"></i>List</a>
-          </div>
+<div class="page-filters" data-controller="page-filters">
+  <div class="rendition-types">
+    <div class="dropdown">
+      <a data-toggle="dropdown" data-target="#" data-controller="links" data-action="links#click" href="javascript:void(0);">
+        <i class="icon-users"></i>Team Member Grid
+      </a>
+      <div class="dropdown-menu">
+        <div class="dropdown-menu-inner">
+          <a data-controller="links" data-action="links#click" href="#"><i class="icon-users"></i>Team Member Grid</a>
+          <a data-controller="links" data-action="links#click" href="#"><i class="icon-flag"></i>Position Grid</a>
+          <a data-controller="links" data-action="links#click" href="#"><i class="icon-map-marker-alt"></i>Location Grid</a>
+          <a data-controller="links" data-action="links#click" href="#"><i class="icon-calendar-alt"></i>Calendar</a>
+          <a data-controller="links" data-action="links#click" href="#"><i class="icon-list"></i>List</a>
         </div>
       </div>
     </div>
-
-    <div class="filter-collections">
-      <a data-controller="links" data-action="links#click" data-links-remote-modal="pane" data-remote="true" href="#"><i class="icon-filter"></i>Add Filter</a>
-    </div>
-
-    <div class="filter-scopes">
-      <a class="scope shift-published published" data-controller="filter-scope-count links" data-filter-scope-count-scope-name="shift_published" data-filter-scope-count-scope-value="published" data-action="links#click ajax:before->links#ajaxBefore ajax:complete->links#ajaxComplete" data-remote="true" href="#">
-        <i class="icon"></i>
-        <span class="count" data-target="filter-scope-count.count">0</span>Published
-      </a>
-      <a class="scope shift-published not-published" data-controller="filter-scope-count links" data-filter-scope-count-scope-name="shift_published" data-filter-scope-count-scope-value="not_published" data-action="links#click ajax:before->links#ajaxBefore ajax:complete->links#ajaxComplete" data-remote="true" href="#">
-        <i class="icon"></i>
-        <span class="count" data-target="filter-scope-count.count">0</span>Not Published
-      </a>
-      <a class="scope shift-conflicting conflicting" data-controller="filter-scope-count links" data-filter-scope-count-scope-name="shift_conflicting" data-filter-scope-count-scope-value="conflicting" data-action="links#click ajax:before->links#ajaxBefore ajax:complete->links#ajaxComplete" data-remote="true" href="#">
-        <i class="icon"></i>
-        <span class="count" data-target="filter-scope-count.count">0</span>Error
-      </a>
-    </div>
-    
-    <div class="filter-extras">
-      <div class="totals" data-controller="totals">
-        <a class="warning d-none" data-target="totals.disabledWarning" data-controller="links" data-action="links#click" target="blank" href="#"><i class="icon-exclamation-triangle"></i>Totals Disabled</a>
-        <div class="total" data-target="totals.duration">0 hrs</div>
-        <div class="total" data-target="totals.cost">$0</div>
-      </div>
-    </div>
   </div>
 
-  <div class="page-body">
-    <div class="grid-wrapper">
-      <div class="grid-header">
-        <div class="cell"></div>
-        <% (0..23).each do |i| %>
-          <div class="cell"><%= (i + 4) % 24 %></div>
+  <div class="filter-collections">
+    <a data-controller="links" data-action="links#click" data-links-remote-modal="pane" data-remote="true" href="#"><i class="icon-filter"></i>Add Filter</a>
+  </div>
+</div>
+
+<div class="page-body">
+  <div class="grid-wrapper">
+    <div class="grid-header">
+      <div class="cell"></div>
+      <% (0..23).each do |i| %>
+        <div class="cell"><%= (i + 4) % 24 %></div>
+      <% end %>
+    </div>
+    <div class="day grid-wrapper">
+      <div class="grid">
+
+        <% @stamp_date_map.each do |date, stamps| %>
+          <div class="grid-row">
+            <div class="cell">
+              <div class="title"><%= date.to_s(:jp_ymd) %></div>
+              <div class="totals">
+                <div class="total" data-target="totals.time"><%= Time.at(stamps.sum(&:sec)).utc.strftime("合計 %-H時間 %-M分") %></div>
+              </div>
+            </div>
+            <div class="w-100">
+              <% stamps.each do |stamp| %>
+                <a data-controller="stamp-cell" data-action="stamp-cell#showModal" data-stamp-cell-json="<%= raw stamp.to_json %>" class="editable schedule-cell normal" data-target="stamp-cell.cell" style="display:grid;<%= timeframe_style(stamp) %>">
+                  <i class="color-border" style="background:#8a8a48"></i>
+                  <div class="heading">
+                    <div class="title"><%= "#{stamp.in_at.to_s(:hm)} - #{stamp.out_at.nil? ? "継続" : stamp.out_at.to_s(:hm)}" %></div>
+                  </div>
+                  <div class="details"></div>
+                </a>
+              <% end %>
+            </div>
+          </div>
         <% end %>
+
+        <div class="grid-row hour-lines">
+          <% (0..24).each do |i| %>
+            <div class="cell"></div>
+          <% end %>
+        </div>
       </div>
-      <div data-target="viewer.rowsBase"></div>
     </div>
   </div>
-</div>
-
-
-
-<div class="grid-wrapper">
-
-<div class="assignments day grid-wrapper loading-hidden" data-controller="grid">
-
-
-<div class="grid drag-container">
-
-
-<div class="grid-row" data-id="341240" data-target="grid.row">
-<div class="cell">
-<a class="title" data-controller="links" data-action="links#click" data-links-remote-modal="true" data-remote="true" href="/42385/assignments/341240?force_show=true">Ryo Matsumura</a>
-<div class="totals loading-hidden" data-controller="totals" data-totals-row-id="341240">
-<a class="warning d-none" data-target="totals.disabledWarning" data-controller="links" data-action="links#click" target="blank" href="https://help.zoomshift.com/article/37-why-am-i-seeing-totals-disabled-message"><i class="icon-exclamation-triangle"></i>Totals Disabled</a>
-<div class="total" data-target="totals.duration">5 hrs</div>
-<div class="total" data-target="totals.cost">$0</div>
-</div>
-
-
-
-</div>
-<div class="cell">
-
-
-<div class="schedule-cell-list ui-droppable" data-action="click->schedule-cell-list#newModel" data-controller="schedule-cell-list" data-schedule-cell-list-date-index="0" data-schedule-cell-list-row-id="341240"><!----><!----><!---->
-      <a data-controller="model-wrapper" data-target="mobile-pull-to-refresh.observable" data-action="model-wrapper#click" class="filtered schedule-cell time-off" data-id="477840" data-model-wrapper-model-name="time_off" data-tooltip="" style="" data-original-title="" title="">
-      
-      
-      <div class="heading">
-        <i class="icon-tree-palm"></i>
-        <div class="title"><!---->All Day<!----></div>
-        <div class="indicators"><!----><!----><div class="status approved" data-tooltip="Approved"><!---->A<!----></div><!----><i class="icon-info-circle" data-tooltip="Example time off request."></i><!----><!----></div>
-      </div>
-      
-    
-      </a>
-    <!----><!---->
-      <a data-controller="model-wrapper" data-target="mobile-pull-to-refresh.observable" data-action="model-wrapper#click" class="has-swap filtered schedule-cell shift ui-draggable ui-draggable-handle" data-id="31949210" data-model-wrapper-model-name="shift" data-tooltip="" style="margin-left: 35.4167%; margin-right: 43.75%;" data-original-title="" title="">
-      
-      <i class="color-border" style="background:#8a8a48"></i>
-      
-      <div class="heading">
-        
-        <div class="title"><!---->8:30am - 1:30pm<!----></div>
-        <div class="indicators"><!----><!----><i class="icon-exclamation-circle" data-tooltip="Error" data-original-title="" title=""></i><!----><div class="status pending" data-tooltip="Pending"><!---->P<!----></div><!----><!----></div>
-      </div>
-      <div class="details"><!---->ホール<!----></div>
-    
-      </a>
-    <!----><!----><!----><!----><!----></div>
-</div>
-<div class="cell">
-
-
-<div class="schedule-cell-list ui-droppable" data-action="click->schedule-cell-list#newModel" data-controller="schedule-cell-list" data-schedule-cell-list-date-index="1" data-schedule-cell-list-row-id="341240"><!----><!----><!----><!----><!----><!----></div>
-</div>
-<div class="cell">
-
-
-<div class="schedule-cell-list ui-droppable" data-action="click->schedule-cell-list#newModel" data-controller="schedule-cell-list" data-schedule-cell-list-date-index="2" data-schedule-cell-list-row-id="341240"><!----><!----><!----><!----><!----><!----></div>
-</div>
-<div class="cell">
-
-
-<div class="schedule-cell-list ui-droppable" data-action="click->schedule-cell-list#newModel" data-controller="schedule-cell-list" data-schedule-cell-list-date-index="3" data-schedule-cell-list-row-id="341240"><!----><!----><!----><!----><!----><!----></div>
-</div>
-<div class="cell">
-
-
-<div class="schedule-cell-list ui-droppable" data-action="click->schedule-cell-list#newModel" data-controller="schedule-cell-list" data-schedule-cell-list-date-index="4" data-schedule-cell-list-row-id="341240"><!----><!----><!----><!----><!----><!----></div>
-</div>
-<div class="cell">
-
-
-<div class="schedule-cell-list ui-droppable" data-action="click->schedule-cell-list#newModel" data-controller="schedule-cell-list" data-schedule-cell-list-date-index="5" data-schedule-cell-list-row-id="341240"><!----><!----><!----><!----><!----><!----></div>
-</div>
-<div class="cell">
-
-
-<div class="schedule-cell-list ui-droppable" data-action="click->schedule-cell-list#newModel" data-controller="schedule-cell-list" data-schedule-cell-list-date-index="6" data-schedule-cell-list-row-id="341240"><!----><!----><!----><!----><!----><!----></div>
-</div>
-</div>
-
-<div class="grid-row d-none" data-target="grid.hiddenAssignmentsRow">
-<div class="cell">
-<div class="title">
-Hidden Team Members
-<i class="icon-question-circle" data-tooltip="This row is for team members that are archived, hidden on schedule/attendance views, or do not match the current filters but have some shifts that do."></i>
-</div>
-<div class="totals loading-hidden" data-controller="totals" data-totals-collection-name="filteredHiddenAssignments">
-<a class="warning d-none" data-target="totals.disabledWarning" data-controller="links" data-action="links#click" target="blank" href="https://help.zoomshift.com/article/37-why-am-i-seeing-totals-disabled-message"><i class="icon-exclamation-triangle"></i>Totals Disabled</a>
-<div class="total" data-target="totals.duration">0 hrs</div>
-<div class="total" data-target="totals.cost">$0</div>
-</div>
-
-</div>
-<div class="cell"><div class="schedule-cell-list" data-action="click->schedule-cell-list#newModel" data-controller="schedule-cell-list" data-schedule-cell-list-collection-name="baseFilteredHiddenAssignments" data-schedule-cell-list-date-index="0" data-schedule-cell-list-store-name="shifts"><!----><!----><!----><!----><!----><!----></div></div>
-<div class="cell"><div class="schedule-cell-list" data-action="click->schedule-cell-list#newModel" data-controller="schedule-cell-list" data-schedule-cell-list-collection-name="baseFilteredHiddenAssignments" data-schedule-cell-list-date-index="1" data-schedule-cell-list-store-name="shifts"><!----><!----><!----><!----><!----><!----></div></div>
-<div class="cell"><div class="schedule-cell-list" data-action="click->schedule-cell-list#newModel" data-controller="schedule-cell-list" data-schedule-cell-list-collection-name="baseFilteredHiddenAssignments" data-schedule-cell-list-date-index="2" data-schedule-cell-list-store-name="shifts"><!----><!----><!----><!----><!----><!----></div></div>
-<div class="cell"><div class="schedule-cell-list" data-action="click->schedule-cell-list#newModel" data-controller="schedule-cell-list" data-schedule-cell-list-collection-name="baseFilteredHiddenAssignments" data-schedule-cell-list-date-index="3" data-schedule-cell-list-store-name="shifts"><!----><!----><!----><!----><!----><!----></div></div>
-<div class="cell"><div class="schedule-cell-list" data-action="click->schedule-cell-list#newModel" data-controller="schedule-cell-list" data-schedule-cell-list-collection-name="baseFilteredHiddenAssignments" data-schedule-cell-list-date-index="4" data-schedule-cell-list-store-name="shifts"><!----><!----><!----><!----><!----><!----></div></div>
-<div class="cell"><div class="schedule-cell-list" data-action="click->schedule-cell-list#newModel" data-controller="schedule-cell-list" data-schedule-cell-list-collection-name="baseFilteredHiddenAssignments" data-schedule-cell-list-date-index="5" data-schedule-cell-list-store-name="shifts"><!----><!----><!----><!----><!----><!----></div></div>
-<div class="cell"><div class="schedule-cell-list" data-action="click->schedule-cell-list#newModel" data-controller="schedule-cell-list" data-schedule-cell-list-collection-name="baseFilteredHiddenAssignments" data-schedule-cell-list-date-index="6" data-schedule-cell-list-store-name="shifts"><!----><!----><!----><!----><!----><!----></div></div>
-</div>
-
-<div class="grid-row hour-lines">
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-<div class="cell"></div>
-</div>
-</div>
-
-</div>
-
 </div>

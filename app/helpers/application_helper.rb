@@ -1,4 +1,16 @@
 module ApplicationHelper
+  def timeframe_style(stamp)
+    left = timeframe_margin(stamp.in_at, stamp.in_on.beginning_of_day + 4.hours)
+    right = timeframe_margin(stamp.in_on.end_of_day + 4.hours, stamp.out_at)
+    #right = [right, 100 - left - 7].min
+    return "margin-left: #{left}%; margin-right: #{right}%;"
+  end
+
+  def timeframe_margin(left, right)
+    right ||= Time.current
+    [0, left.to_i - right.to_i].max / 864.to_f
+  end
+
   def calender_color_class(str_or_date)
     case str_or_date
     when Date

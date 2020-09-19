@@ -26,10 +26,6 @@ class User < ActiveRecord::Base
     @organization ||= Organization.find_by(code: self.organization_code)
   end
 
-  def stamps_of(date)
-    Stamp.where(user_id: self.id, in_on: date)
-  end
-
   def generate_code
     self.code ||= Digest::SHA1.hexdigest(self.id.to_s + "SALT_ICED_COFFEE")
   end

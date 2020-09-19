@@ -5,7 +5,7 @@ module Jsonp
       @html = html
     end
     
-    def to_h
+    def render
       {
         json: {
           html: @html,

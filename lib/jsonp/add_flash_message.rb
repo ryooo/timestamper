@@ -6,7 +6,7 @@ module Jsonp
       @type = type
     end
     
-    def to_h
+    def render
       {
         json: {
           type: @type,

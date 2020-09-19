@@ -3305,7 +3305,7 @@ body {
   }
 }
 
-.schedule-cell.shift {
+.schedule-cell.normal {
   color: #333c48 !important;
   background-color: white;
   border-color: #e5e9f0;
@@ -3318,13 +3318,13 @@ body {
   }
 }
 
-.shift.schedule-cell.ui-draggable-dragging {
+.normal.schedule-cell.ui-draggable-dragging {
   background-color: #edf2f7;
   cursor: pointer;
   color: #333c48;
 }
 
-.schedule-cell.shift {
+.schedule-cell.normal {
   &:focus {
     background-color: #edf2f7;
     cursor: pointer;
@@ -3354,11 +3354,11 @@ body {
   }
 }
 
-.shift.not-published.schedule-cell.ui-draggable-dragging {
+.normal.not-published.schedule-cell.ui-draggable-dragging {
   background-image: repeating-linear-gradient(-45deg, white, white 5px, #eaf0f6 5px, #eaf0f6 10px);
 }
 
-.schedule-cell.shift.has-swap {
+.schedule-cell.normal.editable {
   color: #7256e8 !important;
   background-color: #efedfc;
   border-color: #cdc6f6;
@@ -3371,13 +3371,13 @@ body {
   }
 }
 
-.shift.has-swap.schedule-cell.ui-draggable-dragging {
+.normal.editable.schedule-cell.ui-draggable-dragging {
   background-color: #e4e0fa;
   cursor: pointer;
   color: #7256e8;
 }
 
-.schedule-cell.shift.has-swap {
+.schedule-cell.normal.editable {
   &:focus {
     background-color: #e4e0fa;
     cursor: pointer;
@@ -3393,11 +3393,11 @@ body {
   }
 }
 
-.shift.has-swap.not-published.schedule-cell.ui-draggable-dragging {
+.normal.editable.not-published.schedule-cell.ui-draggable-dragging {
   background-image: repeating-linear-gradient(-45deg, #efedfc, #efedfc 5px, #d9d3f8 5px, #d9d3f8 10px);
 }
 
-.schedule-cell.shift.not-assigned {
+.schedule-cell.normal.not-assigned {
   color: #00a8ff !important;
   background-color: #e7f7ff;
   border-color: #9bdeff;
@@ -3410,13 +3410,13 @@ body {
   }
 }
 
-.shift.not-assigned.schedule-cell.ui-draggable-dragging {
+.normal.not-assigned.schedule-cell.ui-draggable-dragging {
   background-color: #ceefff;
   cursor: pointer;
   color: #00a8ff;
 }
 
-.schedule-cell.shift.not-assigned {
+.schedule-cell.normal.not-assigned {
   &:focus {
     background-color: #ceefff;
     cursor: pointer;
@@ -3432,24 +3432,24 @@ body {
   }
 }
 
-.shift.not-assigned.not-published.schedule-cell.ui-draggable-dragging {
+.normal.not-assigned.not-published.schedule-cell.ui-draggable-dragging {
   background-image: repeating-linear-gradient(-45deg, #e7f7ff, #e7f7ff 5px, #bfeaff 5px, #bfeaff 10px);
 }
 
-.schedule-cell.shift:not(.has-swap):not(.not-assigned) .indicators {
+.schedule-cell.normal:not(.editable):not(.not-assigned) .indicators {
   color: #7d8c9f;
 }
 
-div.schedule-cell.shift {
+div.schedule-cell.normal {
   background-color: #f8fafc;
 }
 
-.schedules-cell .shift:not(.filtered) {
+.schedules-cell .normal:not(.filtered) {
   opacity: 0.2;
 }
 
 .grid-wrapper.day {
-  .schedule-cell.shift:not(.has-swap):not(.not-assigned) {
+  .schedule-cell.normal:not(.editable):not(.not-assigned) {
     background-color: #f8fafc;
 
     &:hover {
@@ -3457,7 +3457,7 @@ div.schedule-cell.shift {
     }
   }
 
-  .shift.schedule-cell.ui-draggable-dragging:not(.has-swap):not(.not-assigned) {
+  .normal.schedule-cell.ui-draggable-dragging:not(.editable):not(.not-assigned) {
     background-color: #edf2f7;
   }
 }
@@ -3479,40 +3479,6 @@ div.schedule-cell.shift {
   background-color: #edf2f7;
   cursor: pointer;
   color: #333c48;
-}
-
-.schedule-cell.timesheet {
-  &:focus {
-    background-color: #edf2f7;
-    cursor: pointer;
-    color: #333c48;
-  }
-
-  .color-border {
-    position: absolute;
-    left: .3em;
-    top: .3em;
-    bottom: .3em;
-    width: .4em;
-    border-radius: .4em;
-    background: #7d8c9f;
-  }
-
-  .heading, .details {
-    margin-left: .85em;
-  }
-
-  &.not-approved {
-    background-image: repeating-linear-gradient(-45deg, white, white 5px, #eff4f8 5px, #eff4f8 10px);
-
-    &:hover {
-      background-image: repeating-linear-gradient(-45deg, white, white 5px, #eaf0f6 5px, #eaf0f6 10px);
-    }
-  }
-}
-
-.timesheet.not-approved.schedule-cell.ui-draggable-dragging {
-  background-image: repeating-linear-gradient(-45deg, white, white 5px, #eaf0f6 5px, #eaf0f6 10px);
 }
 
 .schedule-cell.timesheet .indicators {
@@ -5620,10 +5586,6 @@ body {
           display: block;
           border-right: 1px dashed #e5e9f0;
         }
-
-        &:last-child {
-          border: none;
-        }
       }
     }
   }
@@ -6086,7 +6048,7 @@ body.hide-shifts .shift-summary {
     }
 
     .schedules-cell {
-      .shift:not(.filtered), .timesheet:not(.filtered) {
+      .normal:not(.filtered), .timesheet:not(.filtered) {
         display: none;
       }
     }
@@ -6287,7 +6249,7 @@ body.hide-shifts .shift-summary {
         border: 1px dashed black !important;
       }
 
-      &.shift {
+      &.normal {
         color: black !important;
 
         &.not-assigned {
@@ -7236,7 +7198,7 @@ body.hide-shifts .shift-summary {
       border: 1px dashed black !important;
     }
 
-    &.shift {
+    &.normal {
       color: black !important;
 
       &.not-assigned {

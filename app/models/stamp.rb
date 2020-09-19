@@ -4,6 +4,14 @@ class Stamp < ActiveRecord::Base
     self.find_by(user_id: user.id, in_on: date, out_at: nil)
   end
 
+  def self.find_by_user_and_in_on(user, date)
+    self.where(user_id: user.id, in_on: date)
+  end
+
+  def sec
+    ((out_at || Time.current) - in_at)
+  end
+
   def active?
     self.out_at.nil?
   end

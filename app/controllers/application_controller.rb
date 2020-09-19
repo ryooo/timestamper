@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   private 
 
   def render_jsonps(jsonps)
-    render json: jsonps.map {|jsonp| render_to_string(jsonp.to_h)}.join("\n")
+    render json: jsonps.map {|jsonp| render_to_string(jsonp.render)}.join("\n")
   end
 
   def recaptcha_valid?

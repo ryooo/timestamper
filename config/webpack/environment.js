@@ -5,7 +5,7 @@ environment.plugins.append(
   'Provide',
   new webpack.ProvidePlugin({
     $: 'jquery',
-    'window.$': 'jquery',
+    jQuery: 'jquery/src/jquery',
     _: 'lodash',
     'window._': 'lodash',
   })

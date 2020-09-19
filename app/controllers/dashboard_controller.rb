@@ -6,7 +6,10 @@ class DashboardController < ApplicationController
       date: @current.target_date,
       term: @current.term,
     )
-    @stamp = Stamp.find_active_stamp(current_user)
+    @current_stamp = Stamp.find_active_stamp(current_user)
+    @stamp_date_map = {
+      Date.today => Stamp.find_by_user_and_in_on(current_user, Date.today),
+    }
   end
 
   def stamp
@@ -15,7 +18,11 @@ class DashboardController < ApplicationController
     if @stamp = Stamp.find_active_stamp(current_user)
       @stamp.out(now)
       @stamp.save!
-      jsonps << Jsonp::AddFlashMessage.new("#{now.to_s(:jp_md_hms)} - OUTしました", :notice)
+      flash[:flash_message] = {
+        type: :notice,
+        icon: :"fa-check-circle",
+        message: "#{now.to_s(:jp_md_hms)} - OUTしました",
+      }
     else
       @stamp = Stamp.new(
         organization_id: current_user.organization_id,
@@ -24,9 +31,12 @@ class DashboardController < ApplicationController
         in_at: now,
       )
       @stamp.save!
-      jsonps << Jsonp::AddFlashMessage.new("#{now.to_s(:jp_md_hms)} - INしました", :notice)
+      flash[:flash_message] = {
+        type: :notice,
+        icon: :"fa-check-circle",
+        message: "#{now.to_s(:jp_md_hms)} - INしました",
+      }
     end
-    jsonps << Jsonp::ReplaceForm.new(render_to_string(layout: nil, action: :index))
-    render_jsonps(jsonps)
+    redirect_to action: :index
   end
 end
