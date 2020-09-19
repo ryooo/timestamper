@@ -3721,15 +3721,6 @@ div.schedule-cell.timesheet {
   }
 }
 
-.totals {
-  display: flex;
-
-  .total:not(:last-child):after {
-    content: '/';
-    margin: 0 3px;
-  }
-}
-
 .timesheets-delta {
   &:before {
     margin-right: 3px;

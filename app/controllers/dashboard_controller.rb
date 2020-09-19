@@ -6,37 +6,31 @@ class DashboardController < ApplicationController
       date: @current.target_date,
       term: @current.term,
     )
-    @current_stamp = Stamp.find_active_stamp(current_user)
-    @stamp_date_map = {
-      Date.today => Stamp.find_by_user_and_in_on(current_user, Date.today),
-    }
+    @stamp = Stamp.find_by(user_id: current_user.id, date: Date.today)
+    @stamps = {Date.today => @stamp}
   end
 
   def stamp
     now = Time.current
     jsonps = []
-    if @stamp = Stamp.find_active_stamp(current_user)
+    @stamp = Stamp.find_or_create_by(
+      organization_id: current_user.organization_id,
+      user_id: current_user.id,
+      date: Date.today,
+    )
+    act = if @stamp.active?
       @stamp.out(now)
-      @stamp.save!
-      flash[:flash_message] = {
-        type: :notice,
-        icon: :"fa-check-circle",
-        message: "#{now.to_s(:jp_md_hms)} - OUTしました",
-      }
+      :out
     else
-      @stamp = Stamp.new(
-        organization_id: current_user.organization_id,
-        user_id: current_user.id,
-        in_on: now.to_date,
-        in_at: now,
-      )
-      @stamp.save!
-      flash[:flash_message] = {
-        type: :notice,
-        icon: :"fa-check-circle",
-        message: "#{now.to_s(:jp_md_hms)} - INしました",
-      }
+      @stamp.in(now)
+      :in
     end
+    @stamp.save!
+    flash[:flash_message] = {
+      type: :notice,
+      icon: :"fa-check-circle",
+      message: "#{now.to_s(:jp_md_hms)} - #{act}しました",
+    }
     redirect_to action: :index
   end
 end

@@ -13,7 +13,7 @@
   <hr>
   <div class="text-center">
     <div class="btn-group w-100">
-      <% if @current_stamp&.active? %>
+      <% if @stamp&.active? %>
         <button type="submit" class="btn btn-secondary btn-lg disabled" data-target="forms.submitButton">開始</button>
         <button type="submit" class="btn btn-primary btn-lg ml-4" data-target="forms.submitButton">終了</button>
       <% else %>
@@ -58,20 +58,23 @@
     <div class="day grid-wrapper">
       <div class="grid">
 
-        <% @stamp_date_map.each do |date, stamps| %>
+        <% @stamps.each do |date, stamp| %>
           <div class="grid-row">
             <div class="cell">
               <div class="title"><%= date.to_s(:jp_ymd) %></div>
-              <div class="totals">
-                <div class="total" data-target="totals.time"><%= Time.at(stamps.sum(&:sec)).utc.strftime("合計 %-H時間 %-M分") %></div>
-              </div>
+              <% unless stamp.nil? %>
+                <div class="totals">
+                  <div class="total"><%= time_hm(stamp.total_in_sec) %></div>
+                  <div class="total">(休憩 <%= time_hm(stamp.total_out_sec) %>)</div>
+                </div>
+              <% end %>
             </div>
             <div class="w-100">
-              <% stamps.each do |stamp| %>
-                <a data-controller="stamp-cell" data-action="stamp-cell#showModal" data-stamp-cell-json="<%= raw stamp.to_json %>" class="editable schedule-cell normal" data-target="stamp-cell.cell" style="display:grid;<%= timeframe_style(stamp) %>">
+              <% (stamp&.timeframe_rows || []).each do |timeframe| %>
+                <a data-controller="stamp-cell" data-action="stamp-cell#showModal" data-stamp-cell-json="<%= raw timeframe.to_json %>" class="editable schedule-cell normal" data-target="stamp-cell.cell" style="display:grid;<%= timeframe_style(timeframe) %>">
                   <i class="color-border" style="background:#8a8a48"></i>
                   <div class="heading">
-                    <div class="title"><%= "#{stamp.in_at.to_s(:hm)} - #{stamp.out_at.nil? ? "継続" : stamp.out_at.to_s(:hm)}" %></div>
+                    <div class="title"><%= "#{timeframe.in_at.to_s(:hm)} - #{timeframe.out_at.nil? ? "継続" : timeframe.out_at.to_s(:hm)}" %></div>
                   </div>
                   <div class="details"></div>
                 </a>

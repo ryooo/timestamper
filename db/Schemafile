@@ -90,16 +90,12 @@ add_foreign_key :schedules, "organizations", name: "schedules_organizations_fk"
 create_table :stamps, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
   t.bigint   :organization_id
   t.bigint   :user_id
-  t.integer  :location_id
-  t.date     :in_on
-  t.datetime :in_at
-  t.datetime :out_at
+  t.date     :date
+  t.text     :timeframes
 
   # footer
   t.datetime :created_at
   t.datetime :updated_at
 end
-add_index :stamps, ["organization_id"], name: "organization_id_index", using: :btree
-add_index :stamps, ["user_id", "in_on"], name: "user_id_in_on_index", using: :btree
-add_foreign_key :stamps, "organizations", name: "stamps_organizations_fk"
+add_index :stamps, ["user_id", "date"], name: "user_id_date_index", using: :btree
 

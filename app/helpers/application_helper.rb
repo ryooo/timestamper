@@ -1,7 +1,14 @@
 module ApplicationHelper
-  def timeframe_style(stamp)
-    left = timeframe_margin(stamp.in_at, stamp.in_on.beginning_of_day + 4.hours)
-    right = timeframe_margin(stamp.in_on.end_of_day + 4.hours, stamp.out_at)
+  def time_hm(sec)
+    if sec > 1.hour.to_i
+      Time.at(sec).utc.strftime("%-H時間 %-M分")
+    else
+      Time.at(sec).utc.strftime("%-M分")
+    end
+  end
+  def timeframe_style(timeframe)
+    left = timeframe_margin(timeframe.in_at, timeframe.date.beginning_of_day + 4.hours)
+    right = timeframe_margin(timeframe.date.end_of_day + 4.hours, timeframe.out_at)
     #right = [right, 100 - left - 7].min
     return "margin-left: #{left}%; margin-right: #{right}%;"
   end

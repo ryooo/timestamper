@@ -2,18 +2,22 @@ class StampsController < ApplicationController
   def execute
     now = Time.current
     if user = User.find_by(code: params[:code])
-      stamps = Stamp.where(user_id: user.id, in_on: Date.today)
-      if actice_stamp = stamps&.detect {|stamp| stamp.active?}
-        actice_stamp.out(now)
-        actice_stamp.save!
+      stamp = Stamp.find_by(
+        organization_id: user.organization_id, 
+        user_id: user.id,
+        date: Date.today
+      )
+      if stamp&.active?
+        stamp.out(now)
+        stamp.save!
       else
-        actice_stamp = Stamp.new(
+        stamp ||= Stamp.new(
           organization_id: user.organization_id,
           user_id: user.id,
-          in_on: now.to_date,
-          in_at: now,
+          date: now.to_date,
         )
-        actice_stamp.save!
+        stamp.in(now)
+        stamp.save!
       end
     end
     render plain: "ok"
