@@ -68,6 +68,10 @@ GEM
       debug_inspector (>= 0.0.1)
     bootsnap (1.4.8)
       msgpack (~> 1.0)
+    bootstrap4-datetime-picker-rails (0.3.1)
+      jquery-rails (~> 4.2, >= 4.2.0)
+      moment-timezone-rails (~> 1.0)
+      momentjs-rails (>= 2.10.5, <= 3.0.0)
     builder (3.2.4)
     business_time (0.9.3)
       activesupport (>= 3.2.0)
@@ -141,6 +145,10 @@ GEM
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.14.2)
+    moment-timezone-rails (1.0.0)
+      momentjs-rails (>= 2.10.5, <= 3.0.0)
+    momentjs-rails (2.20.1)
+      railties (>= 3.1)
     msgpack (1.3.3)
     mysql2 (0.5.3)
     net-http-digest_auth (1.4.1)
@@ -283,6 +291,7 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bootsnap (>= 1.4.2)
+  bootstrap4-datetime-picker-rails
   business_time
   byebug
   capybara (>= 2.15)

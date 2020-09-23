@@ -32,8 +32,8 @@ class Stamp < ActiveRecord::Base
 
   def total_sec
     first = self.timeframe_rows.map(&:in_at).min
-    last = self.timeframe_rows.map(&:out_at).min || Time.current
-    last - first
+    last = self.timeframe_rows.map(&:out_at).min rescue nil
+    (last || Time.current) - first
   end
 
   def total_in_sec
@@ -55,6 +55,15 @@ class Stamp < ActiveRecord::Base
     raise "timeframesがactiveではありません #{self.id} #{self.timeframes}" unless self.active?
     raise "outが早すぎます #{self.id} #{self.timeframes}" if time.to_i < self.timeframes.last[:i]
     self.timeframes.last[:o] = time.to_i
+  end
+
+  def to_modal_json(user)
+    {
+      organization_name: user.organization.name,
+      user_name: user.name,
+      date: date,
+      timeframes: timeframes,
+    }.to_json
   end
 
   def as_json(options = {})

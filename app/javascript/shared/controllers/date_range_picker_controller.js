@@ -22,7 +22,7 @@ export default class extends Controller {
     this._addTodayHeader()
 
     $(this.pickerTarget).on('apply.daterangepicker', event => { 
-      this._applyPicker() 
+      //this._applyPicker() 
     })
 
     $(this.pickerTarget).on('show.daterangepicker', event => {
@@ -77,6 +77,9 @@ export default class extends Controller {
   }
 
   _setText() {
+    if (!this.hasPickerTextTarget) {
+      return
+    }
     let text = null
     if (this._term == 'day') {
       text = this._termStartDate.format('YYYY年M月D日(dd)')

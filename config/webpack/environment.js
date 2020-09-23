@@ -8,6 +8,7 @@ environment.plugins.append(
     jQuery: 'jquery/src/jquery',
     _: 'lodash',
     'window._': 'lodash',
+    moment: "moment",
   })
 )
 

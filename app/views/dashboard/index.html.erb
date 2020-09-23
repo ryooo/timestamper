@@ -70,8 +70,8 @@
               <% end %>
             </div>
             <div class="w-100">
-              <% (stamp&.timeframe_rows || []).each do |timeframe| %>
-                <a data-controller="stamp-cell" data-action="stamp-cell#showModal" data-stamp-cell-json="<%= timeframe.to_json %>" class="editable schedule-cell normal" data-target="stamp-cell.cell" style="display:grid;<%= timeframe_style(timeframe) %>">
+              <% (stamp&.timeframe_rows || []).each_with_index do |timeframe, i| %>
+                <a data-controller="stamp-cell" data-action="stamp-cell#showModal" data-stamp-cell-json="<%= stamp.to_modal_json(current_user) %>" data-stamp-cell-timeframe-index="<%= i %>" class="editable schedule-cell normal" data-target="stamp-cell.cell" style="display:grid;<%= timeframe_style(timeframe) %>">
                   <i class="color-border" style="background:#8a8a48"></i>
                   <div class="heading">
                     <div class="title"><%= "#{timeframe.in_at.to_s(:hm)} - #{timeframe.out_at.nil? ? "継続" : timeframe.out_at.to_s(:hm)}" %></div>
@@ -102,7 +102,8 @@
     controller: "forms",
     action: "forms#submit ajax:error->forms#ajaxError ajax:success->forms#ajaxSuccess",
   }) do |f| %>
-    <div class="modal-header" data-target="forms.refreshWrapper"打刻 修正
+    <div class="modal-header" data-target="forms.refreshWrapper">
+      打刻
       <div class="button-group-field" data-controller="button-group-field">
         <a class="btn fields" data-target="button-group-field.button" data-action="button-group-field#clickButton" data-value="fields">修正</a>
         <a class="btn duplicate active" data-target="button-group-field.button" data-action="button-group-field#clickButton" data-value="duplicate">コピー</a>
@@ -112,40 +113,35 @@
     <div class="modal-body">
       <div data-form-state="fields" data-target="form-states.formStateWrapper" class="">
         <div class="form-row">
-          <div class="form-group"><label for="bulk_shift_form_location_id">組織</label>
-            <div class="select-list-wrapper" data-controller="select-list-field" data-divider-name="Locations" data-divider-values="[]" data-selected-values="[&quot;&quot;]">
-              <div class="dropdown">
-                <a class="btn btn-input" data-flip="false" data-toggle="dropdown" data-target="select-list-field.button" data-action="select-list-field#focusSearch">
-                  <div class="select-list-item-label">aaa</div>
-                </a>
-              </div>
-            </div>
+          <div class="form-group">
+            <label>組織</label>
+            <div>${ organization_name }</div>
           </div>
-          <div class="form-group"><label for="bulk_shift_form_location_id">名前</label>
-            <div class="select-list-wrapper" data-controller="select-list-field" data-divider-name="Locations" data-divider-values="[]" data-selected-values="[&quot;&quot;]">
-              <div class="dropdown">
-                <a class="btn btn-input" data-flip="false" data-toggle="dropdown" data-target="select-list-field.button" data-action="select-list-field#focusSearch">
-                  <div class="select-list-item-label">松村 遼</div>
-                </a>
-              </div>
-            </div>
+          <div class="form-group">
+            <label>名前</label>
+            <div>${ user_name }</div>
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-group">
-            <label for="bulk_shift_form_date">日付</label>
-            <div class="btn-group" data-controller="date-range-picker" data-target="date-range-picker.picker">
-              <input data-target="date-field.input" class="form-control" type="text" value="2020/9/19" id="bulk_shift_form_date">
+            <label>開始</label>
+            <div class="btn-group" data-controller="date-field">
+              <input data-target="date-field.input" class="form-control" type="text">
+              <input data-target="date-field.hiddenInput" type="hidden" value="2020-09-19">
+            </div>
+          </div>
+
+          <div class="form-group" data-controller="time-field">
+            <div class="input-group date" id="datetimepicker_inAt" data-target-input="nearest">
+                <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker_inAt" />
+                <span class="input-group-append" data-target="#datetimepicker_inAt" data-toggle="datetimepicker">
+                    <span class="input-group-text"><i class="fa fa-clock-o"></i></span>
+                </span>
             </div>
           </div>
 
           <div class="shift-date-field-wrapper">
-
-            <div class="form-group">
-              <label for="bulk_shift_form_start_time">Start Time</label>
-              <input data-target="bulk-shifts--form.startTimeField" data-action="timeChanged->forms#triggerRefresh" data-controller="time-field" placeholder="e.g. 10am" class="form-control ui-timepicker-input" type="text" value="8:00am" name="bulk_shift_form[start_time]" id="bulk_shift_form_start_time" autocomplete="off">
-            </div>
 
             <div class="form-group" data-target="forms.refreshWrapper">
               <div class="select-list-wrapper" data-controller="select-list-field">
@@ -174,8 +170,6 @@
           </div>
 
           <div class="form-group">
-            <label for="bulk_shift_form_end_time">End Time</label>
-            <input data-target="bulk-shifts--form.endTimeField" data-action="timeChanged->forms#triggerRefresh" data-controller="time-field" placeholder="e.g. 5pm" class="form-control ui-timepicker-input" type="text" value="1:30pm" name="bulk_shift_form[end_time]" id="bulk_shift_form_end_time" autocomplete="off">
           </div>
 
           <div class="form-group" style="max-width:120px">
@@ -207,24 +201,6 @@
             </div>
           </div>
         </div>
-
-        <script>
-          $('.tooltip').tooltip('hide');
-          $('#bulk_shift_form_assignment_ids').next().next().css("max-width", "540px");
-          $('#bulk_shift_form_assignment_ids').next().hide();
-          
-          if ($('#bulk_shift_form_wage_flag').val() == "false") {
-            $('#bulk_shift_form_wage_dollars').css("background-color", "#F8FAFC");
-            $('#bulk_shift_form_wage_dollars').val('');
-          }
-          
-          $('#bulk_shift_form_wage_dollars').on('click',function(){
-            $('#bulk_shift_form_wage_dollars').removeAttr("style");
-            $('#bulk_shift_form_wage_flag').val('clicked');
-          });
-          
-          $('[data-toggle="tooltip"]').tooltip();
-        </script>
       </div>
     </div>
 
@@ -236,5 +212,7 @@
     </div>
   <% end %>
 </template>
+
+
 
 
