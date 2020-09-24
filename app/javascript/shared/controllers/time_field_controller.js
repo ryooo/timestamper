@@ -2,11 +2,18 @@ import { Controller } from "stimulus"
 import 'tempusdominus-bootstrap-4';
 
 export default class extends Controller {
-  static targets = ['input', 'hiddenInput']
+  id = null
+  input = null
 
   initialize() {
+    this.id = 'time-field-' + _.random(0, 1000000)
+    jQuery(this.element).attr('id', this.id).attr("data-target-input", "nearest");
+    this.input = jQuery(this.element).find("> input")
+    this.input.data("target", "#" + this.id)
+    this.input.addClass("datetimepicker-input")
+    this.input.attr("data-toggle", "datetimepicker")
 
-    jQuery("#datetimepicker_inAt").datetimepicker({
+    jQuery("#" + this.id).datetimepicker({
         tooltips: {
             close: '閉じる',
             pickHour: '時間を取得',
@@ -27,25 +34,5 @@ export default class extends Controller {
             showClose: true
         }
     });
-    this.updateInputs()
-
-    $(this.inputTarget).on('apply.datetimepicker', event => {
-      this.updateInputs(true)
-    })
-
-    // $(this.timePicker.container).on('click', event => {
-    //   if ($(event.target).is(this.timePicker.container)) this.timePicker.hide()
-    // })
-  }
-
-  updateInputs(triggerChangeEvent = false) {
-    this.inputTarget.value = this.initialTime.format('HH:mm')
-    this.hiddenInputTarget.value = this.initialTime.format('HH:mm')
-    if (triggerChangeEvent) this.hiddenInputTarget.dispatchEvent(new Event('change'))
-  }
-
-  get initialTime() {
-    const time = moment(this.hiddenInputTarget.value, 'HH:mm')
-    return time.isValid() && time || moment()
   }
 }

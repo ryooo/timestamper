@@ -11,5 +11,4 @@ environment.plugins.append(
     moment: "moment",
   })
 )
-
 module.exports = environment

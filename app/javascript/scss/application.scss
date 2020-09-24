@@ -2048,6 +2048,10 @@ form.pulsing {
     display: flex;
     z-index: 999;
 
+    &.space-between {
+      justify-content: space-between;
+    }
+
     .secondary-links {
       flex: 1;
       display: flex;
@@ -3635,15 +3639,13 @@ div.schedule-cell.timesheet {
   color: #7d8c9f;
 }
 
-.shift-date-field-wrapper {
+.date-field-wrapper {
   display: flex;
   padding: 0 5px;
-  max-width: 190px;
+  max-width: 300px;
   align-items: flex-end;
 
   .form-group:first-child:not(:last-child) {
-    z-index: 99;
-
     .form-control {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
