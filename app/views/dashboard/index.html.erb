@@ -13,7 +13,7 @@
   <hr>
   <div class="text-center">
     <div class="btn-group w-100">
-      <% if @stamp&.active? %>
+      <% if @timeframe&.active? %>
         <button type="submit" class="btn btn-secondary btn-lg disabled" data-target="forms.submitButton">開始</button>
         <button type="submit" class="btn btn-primary btn-lg ml-4" data-target="forms.submitButton">終了</button>
       <% else %>
@@ -28,7 +28,7 @@
   <div class="rendition-types">
     <div class="dropdown">
       <a data-toggle="dropdown" data-target="#" data-controller="links" data-action="links#click" href="javascript:void(0);">
-        <i class="icon-users"></i>Team Member Grid
+        <i class="icon-users"></i>表示切り替え
       </a>
       <div class="dropdown-menu">
         <div class="dropdown-menu-inner">
@@ -43,7 +43,7 @@
   </div>
 
   <div class="filter-collections">
-    <a data-controller="links" data-action="links#click" data-links-remote-modal="pane" data-remote="true" href="#"><i class="icon-filter"></i>Add Filter</a>
+    <a href="/timestamps/"><i class="icon-filter"></i>履歴をみる</a>
   </div>
 </div>
 
@@ -58,20 +58,18 @@
     <div class="day grid-wrapper">
       <div class="grid">
 
-        <% @stamps.each do |date, stamp| %>
+        <% @timeframe_set_map.each do |date, timeframe_set| %>
           <div class="grid-row">
             <div class="cell">
               <div class="title"><%= date.to_s(:jp_ymd) %></div>
-              <% unless stamp.nil? %>
-                <div class="totals">
-                  <div class="total"><%= time_hm(stamp.total_in_sec) %></div>
-                  <div class="total">(休憩 <%= time_hm(stamp.total_out_sec) %>)</div>
-                </div>
-              <% end %>
+              <div class="totals">
+                <div class="total"><%= time_hm(timeframe_set.total_in_sec) %></div>
+                <div class="total">(休憩 <%= time_hm(timeframe_set.total_out_sec) %>)</div>
+              </div>
             </div>
             <div class="w-100">
-              <% (stamp&.timeframe_rows || []).each_with_index do |timeframe, i| %>
-                <a data-controller="stamp-cell" data-action="stamp-cell#showModal" data-stamp-cell-json="<%= stamp.to_modal_json(current_user) %>" data-stamp-cell-timeframe-index="<%= i %>" class="editable schedule-cell normal" data-target="stamp-cell.cell" style="display:grid;<%= timeframe_style(timeframe) %>">
+              <% timeframe_set.timeframes.each_with_index do |timeframe, i| %>
+                <a data-controller="stamp-cell" data-action="stamp-cell#showModal" data-stamp-cell-json="<%= timeframe.to_modal_hash(current_user).to_json %>" data-stamp-cell-timeframe-index="<%= i %>" class="editable schedule-cell normal" data-target="stamp-cell.cell" style="display:grid;<%= timeframe_style(timeframe) %>">
                   <i class="color-border" style="background:#8a8a48"></i>
                   <div class="heading">
                     <div class="title"><%= "#{timeframe.in_at.to_s(:hm)} - #{timeframe.out_at.nil? ? "継続" : timeframe.out_at.to_s(:hm)}" %></div>
@@ -96,14 +94,14 @@
 
 <template id="stamp-show-modal-template">
   <%= form_with(
-  url: stamp_update_path,
+  url: timeframes_update_path,
   id: "modal-form",
   data: {
     controller: "forms",
     action: "forms#submit ajax:error->forms#ajaxError ajax:success->forms#ajaxSuccess",
   }) do |f| %>
     <div class="modal-header" data-target="forms.refreshWrapper">
-      打刻修正
+      修正
 <%#
       <div class="button-group-field" data-controller="button-group-field">
         <a class="btn fields" data-target="button-group-field.button" data-action="button-group-field#clickButton" data-value="fields">修正</a>
@@ -114,6 +112,7 @@
 
     <div class="modal-body">
       <div data-form-state="fields" data-target="form-states.formStateWrapper" class="">
+        <input name="timeframe[id]" type="hidden" value="${ id }">
         <div class="form-row">
           <div class="form-group">
             <label>組織</label>
@@ -130,14 +129,14 @@
             <div class="form-group">
               <label>開始</label>
               <div class="btn-group" data-controller="date-field">
-                <input data-target="date-field.input" class="form-control" type="text" value="">
-                <input name="stamp[in_date]" data-target="date-field.hiddenInput" type="hidden">
+                <input data-target="date-field.input" class="form-control" type="text" value="${ moment(in_at).format('YYYY-MM-DD') }">
+                <input name="timeframe[in_date]" data-target="date-field.hiddenInput" type="hidden">
               </div>
             </div>
 
             <div class="form-group">
               <div class="input-group" data-controller="time-field">
-                  <input name="stamp[in_time]" type="text" class="form-control" value="7:00">
+                  <input name="timeframe[in_time]" type="text" class="form-control" value="${ moment(in_at).format('HH:mm') }">
               </div>
             </div>
           </div>
@@ -148,14 +147,14 @@
             <div class="form-group">
               <label>終了</label>
               <div class="btn-group" data-controller="date-field">
-                <input data-target="date-field.input" class="form-control" type="text" value="2020-09-19">
-                <input name="stamp[out_date]" data-target="date-field.hiddenInput" type="hidden">
+                <input data-target="date-field.input" class="form-control" type="text" value="${ out_at == null ? '' : moment(out_at).format('YYYY-MM-DD') }">
+                <input name="timeframe[out_date]" data-target="date-field.hiddenInput" type="hidden">
               </div>
             </div>
 
             <div class="form-group">
               <div class="input-group" data-controller="time-field">
-                  <input name="stamp[out_date]" type="text" class="form-control" value="7:00">
+                  <input name="timeframe[out_time]" type="text" class="form-control" value="${ out_at == null ? '' : moment(out_at).format('HH:mm') }">
               </div>
             </div>
           </div>
@@ -163,7 +162,7 @@
 
         <div class="form-group">
           <label>メモ</label>
-          <textarea placeholder="" class="form-control" name="stamp[memo]"></textarea>
+          <textarea placeholder="" class="form-control" name="timeframe[memo]">${ memo }</textarea>
         </div>
 <%#
         <div>
@@ -173,7 +172,7 @@
             <div class="toggle-well">
               <div class="form-text">打刻を削除したい場合は右のボタンを有効にしてください。</div>
               <div class="toggle-field" data-controller="toggle-field">
-                <input data-target="toggle-field.hiddenInput" type="hidden" value="true" name="stamp[delete_confirm]">
+                <input data-target="toggle-field.hiddenInput" type="hidden" value="true" name="timeframe[delete_confirm]">
                 <a class="toggle-switch on animate" data-target="toggle-field.switch" data-action="toggle-field#clickSwitch"></a>
               </div>
             </div>
@@ -184,8 +183,8 @@
     </div>
 
     <div class="modal-footer space-between">
-        <button name="stamp[delete]" type="submit" value="true" class="btn btn-danger" data-target="forms.submitButton">削除</button>
-      <button type="submit" class="btn btn-blue" data-target="forms.submitButton">保存</button>
+      <button name="timeframe[delete]" value="true" type="submit" class="btn btn-danger" data-target="forms.submitButton">削除</button>
+      <button name="timeframe[save]" value="true" type="submit" class="btn btn-blue" data-target="forms.submitButton">保存</button>
     </div>
   <% end %>
 </template>

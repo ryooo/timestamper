@@ -16,7 +16,6 @@ export default class extends Controller {
 window.current = new Current
 
 window.resetStores = () => {
-  window.stamps.reset()
 }
 
 $(document).on('turbolinks:visit', event => {

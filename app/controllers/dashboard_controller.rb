@@ -6,26 +6,32 @@ class DashboardController < ApplicationController
       date: @current.target_date,
       term: @current.term,
     )
-    @stamp = Stamp.find_by(user_id: current_user.id, date: Date.today)
-    @stamps = {Date.today => @stamp}
+    timeframes = Timeframe.where(
+      organization_id: current_user.organization_id,
+      user_id: current_user.id,
+      in_at: Timeframe.current_range,
+      deleted_at: nil,
+    ).order(in_at: :asc)
+    @timeframe_set_map = {Timeframe.current_range.first.to_date => ::Timeframe::Set.new(timeframes)}
+    @timeframe = timeframes.detect {|e| e.active? }
   end
 
   def stamp
     now = Time.current
     jsonps = []
-    @stamp = Stamp.find_or_create_by(
+    @timeframe = Timeframe.find_or_initialize_by(
       organization_id: current_user.organization_id,
       user_id: current_user.id,
-      date: Date.today,
+      out_at: nil,
     )
-    act = if @stamp.active?
-      @stamp.out(now)
-      :out
-    else
-      @stamp.in(now)
+    act = if @timeframe.new_record?
+      @timeframe.in_at = now
       :in
+    else
+      @timeframe.out_at = now
+      :out
     end
-    @stamp.save!
+    @timeframe.save!
     flash[:flash_message] = {
       type: :notice,
       icon: :"fa-check-circle",

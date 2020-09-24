@@ -87,15 +87,19 @@ add_index :schedules, ["organization_id"], name: "organization_id_index", using:
 add_foreign_key :schedules, "organizations", name: "schedules_organizations_fk"
 
 
-create_table :stamps, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+create_table :timeframes, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
   t.bigint   :organization_id
   t.bigint   :user_id
-  t.date     :date
-  t.text     :timeframes
+  t.datetime :in_at
+  t.datetime :out_at
+  t.string   :memo
+  t.text     :history
+  t.datetime :deleted_at
 
   # footer
   t.datetime :created_at
   t.datetime :updated_at
 end
-add_index :stamps, ["user_id", "date"], name: "user_id_date_index", using: :btree
+add_index :timeframes, ["organization_id", "user_id", "in_at"], name: "organization_id_user_id_in_at_index", using: :btree
+add_index :timeframes, ["organization_id", "user_id", "out_at"], name: "organization_id_user_id_out_at_index", using: :btree
 

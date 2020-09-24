@@ -8,8 +8,9 @@ module ApplicationHelper
   end
   
   def timeframe_style(timeframe)
-    left = timeframe_margin(timeframe.in_at, timeframe.date.beginning_of_day + 4.hours)
-    right = timeframe_margin(timeframe.date.end_of_day + 4.hours, timeframe.out_at)
+    range = Timeframe.current_range
+    left = timeframe_margin(timeframe.in_at, range.begin)
+    right = timeframe_margin(range.end, timeframe.out_at)
     #right = [right, 100 - left - 7].min
     return "margin-left: #{left}%; margin-right: #{right}%;"
   end

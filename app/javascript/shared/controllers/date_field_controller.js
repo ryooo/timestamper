@@ -36,19 +36,21 @@ export default class extends Controller {
         buttons: {
             showClose: true
         }
-    });
+    })
+    if (this.input.val() != "") {
+      this.cp2HiddenInput(moment(this.input.val()))
+    }
 
     jQuery("#" + this.id).on('show.datetimepicker', event => {
       jQuery(event.target).find("> div").css("top", "40px")
     })
 
     jQuery("#" + this.id).on('change.datetimepicker', event => {
-      this.cp2HiddenInput(event)
+      this.cp2HiddenInput(event.date)
     })
   }
 
-  cp2HiddenInput(event) {
-    this.hiddenInput.val(event.date.format("YYYY-MM-DD"))
-    console.log(this.hiddenInput.val())
+  cp2HiddenInput(date) {
+    this.hiddenInput.val(date.format("YYYY-MM-DD"))
   }
 }
