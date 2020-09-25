@@ -7,8 +7,8 @@ module ApplicationHelper
     end
   end
   
-  def timeframe_style(timeframe)
-    range = Timeframe.current_range
+  def timeframe_style(timeframe, date)
+    range = Timeframe.current_range(date)
     left = timeframe_margin(timeframe.in_at, range.begin)
     right = timeframe_margin(range.end, timeframe.out_at)
     #right = [right, 100 - left - 7].min

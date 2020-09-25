@@ -59,6 +59,9 @@ export default class extends Controller {
 }
 
 window.showModal = (json) => {
+  if (json.type) {
+    findController('modals')._setModalStyle(json.type)
+  }
   findController('modals').show(json.html)
 }
 

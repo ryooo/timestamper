@@ -1,0 +1,143 @@
+<div class="page-body">
+  <div class="grid-wrapper">
+    <div class="grid-header">
+      <div class="cell"></div>
+      <% (0..23).each do |i| %>
+        <div class="cell"><%= (i + 4) % 24 %></div>
+      <% end %>
+    </div>
+    <div class="day grid-wrapper">
+      <div class="grid">
+
+        <% @timeframe_set_map.each do |date, timeframe_set| %>
+          <div class="grid-row">
+            <div class="cell">
+              <div class="title"><%= date.to_s(:jp_mdw) %></div>
+              <% if timeframe_set.present? %>
+                <div class="totals">
+                  <div class="total"><%= time_hm(timeframe_set.total_in_sec) %></div>
+                  <div class="total">(休憩 <%= time_hm(timeframe_set.total_out_sec) %>)</div>
+                </div>
+              <% end %>
+            </div>
+            <div class="w-100 grid-date-base">
+              <% (timeframe_set&.timeframes || []).each_with_index do |timeframe, i| %>
+                <a data-controller="timeframe-cell" data-action="timeframe-cell#showTimeframeModal" data-timeframe-cell-json="<%= timeframe.to_modal_hash(current_user).to_json %>" class="editable schedule-cell normal" style="display:grid;<%= timeframe_style(timeframe, date) %>">
+                  <i class="color-border" style="background:#8a8a48"></i>
+                  <div class="heading">
+                    <div class="title"><%= "#{timeframe.in_at.to_s(:hm)} - #{timeframe.out_at.nil? ? "継続" : timeframe.out_at.to_s(:hm)}" %></div>
+                  </div>
+                  <div class="details"></div>
+                </a>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="grid-row hour-lines">
+          <% (0..24).each do |i| %>
+            <div class="cell"></div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<template id="stamp-show-modal-template">
+  <%= form_with(
+  url: timeframes_update_path,
+  id: "modal-form",
+  data: {
+    controller: "forms",
+    action: "forms#submit ajax:error->forms#ajaxError ajax:success->forms#ajaxSuccess",
+  }) do |f| %>
+    <div class="modal-header" data-target="forms.refreshWrapper">
+      修正
+<%#
+      <div class="button-group-field" data-controller="button-group-field">
+        <a class="btn fields" data-target="button-group-field.button" data-action="button-group-field#clickButton" data-value="fields">修正</a>
+        <a class="btn duplicate active" data-target="button-group-field.button" data-action="button-group-field#clickButton" data-value="duplicate">コピー</a>
+      </div>
+%>
+    </div>
+
+    <div class="modal-body">
+      <div data-form-state="fields" data-target="form-states.formStateWrapper" class="">
+        <input name="timeframe[id]" type="hidden" value="${ id }">
+        <div class="form-row">
+          <div class="form-group">
+            <label>組織</label>
+            <div>${ organization_name }</div>
+          </div>
+          <div class="form-group">
+            <label>名前</label>
+            <div>${ user_name }</div>
+          </div>
+        </div>
+
+        <div class="form-row ml-1">
+          <div class="date-field-wrapper">
+            <div class="form-group">
+              <label>開始</label>
+              <div class="btn-group" data-controller="date-field">
+                <input data-target="date-field.input" class="form-control" type="text" value="${ moment(in_at).format('YYYY-MM-DD') }">
+                <input name="timeframe[in_date]" data-target="date-field.hiddenInput" type="hidden">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="input-group" data-controller="time-field">
+                  <input name="timeframe[in_time]" type="text" class="form-control" value="${ moment(in_at).format('HH:mm') }">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row ml-1">
+          <div class="date-field-wrapper">
+            <div class="form-group">
+              <label>終了</label>
+              <div class="btn-group" data-controller="date-field">
+                <input data-target="date-field.input" class="form-control" type="text" value="${ out_at == null ? '' : moment(out_at).format('YYYY-MM-DD') }">
+                <input name="timeframe[out_date]" data-target="date-field.hiddenInput" type="hidden">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="input-group" data-controller="time-field">
+                  <input name="timeframe[out_time]" type="text" class="form-control" value="${ out_at == null ? '' : moment(out_at).format('HH:mm') }">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>メモ</label>
+          <textarea placeholder="" class="form-control" name="timeframe[memo]">${ memo }</textarea>
+        </div>
+<%#
+        <div>
+          <div class="modal-divider">削除</div>
+          <div class="form-group">
+            <label for="bulk_shift_form_public">打刻を削除しますか？</label>
+            <div class="toggle-well">
+              <div class="form-text">打刻を削除したい場合は右のボタンを有効にしてください。</div>
+              <div class="toggle-field" data-controller="toggle-field">
+                <input data-target="toggle-field.hiddenInput" type="hidden" value="true" name="timeframe[delete_confirm]">
+                <a class="toggle-switch on animate" data-target="toggle-field.switch" data-action="toggle-field#clickSwitch"></a>
+              </div>
+            </div>
+          </div>
+        </div>
+%>
+      </div>
+    </div>
+
+    <div class="modal-footer space-between">
+      <button name="timeframe[delete]" value="true" type="submit" class="btn btn-danger" data-target="forms.submitButton">削除</button>
+      <button name="timeframe[save]" value="true" type="submit" class="btn btn-blue" data-target="forms.submitButton">保存</button>
+    </div>
+  <% end %>
+</template>

@@ -42,7 +42,7 @@ export default class extends Controller {
     }
 
     jQuery("#" + this.id).on('show.datetimepicker', event => {
-      jQuery(event.target).find("> div").css("top", "40px")
+      jQuery(event.target).find("> div.bootstrap-datetimepicker-widget").css("top", "40px")
     })
 
     jQuery("#" + this.id).on('change.datetimepicker', event => {

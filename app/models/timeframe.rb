@@ -2,6 +2,16 @@ class Timeframe < ActiveRecord::Base
   serialize :history
   class Set
     attr_reader :timeframes
+    def self.date_map(timeframes, dates)
+      dates = dates.to_a if dates.is_a?(::Range)
+      map = Hash[*[dates, [nil] * dates.size].transpose.flatten]
+      timeframes.each do |timeframe|
+        map[timeframe.date] ||= ::Timeframe::Set.new
+        map[timeframe.date].timeframes << timeframe
+      end
+      map
+    end
+
     def initialize(timeframes = [])
       @timeframes = timeframes
     end

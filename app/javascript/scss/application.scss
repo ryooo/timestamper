@@ -5391,6 +5391,10 @@ body {
 .grid-wrapper {
   min-width: 1024px;
 
+  .grid-date-base {
+    border: 1px solid #e5e9f0;
+  }
+
   .cell {
     flex: 1;
     border-right: 1px solid #e5e9f0;
