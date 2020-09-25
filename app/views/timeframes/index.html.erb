@@ -1,49 +1,21 @@
-
-<%= form_with(
-  url: dashboard_stamp_path,
-  id: "main-form",
-  class: "basic-wrap mt-4 mb-4",
-  data: {
-    controller: "forms",
-    action: "forms#submit ajax:error->forms#ajaxError ajax:success->forms#ajaxSuccess",
-  }) do |f| %>
-  <div class="basic-header">
-    <h3 class="title">打刻</h3>
-  </div>
-  <hr>
-  <div class="text-center">
-    <div class="btn-group w-100">
-      <% if @timeframe&.active? %>
-        <button type="submit" class="btn btn-secondary btn-lg disabled" data-target="forms.submitButton">開始</button>
-        <button type="submit" class="btn btn-primary btn-lg ml-4" data-target="forms.submitButton">終了</button>
-      <% else %>
-        <button type="submit" class="btn btn-primary btn-lg" data-target="forms.submitButton">開始</button>
-        <button type="submit" class="btn btn-secondary btn-lg disabled ml-4" data-target="forms.submitButton">終了</button>
-      <% end %>
-    </div>
-  </div>
-<% end %>
-
-<div class="page-filters" data-controller="page-filters">
-  <div class="rendition-types">
-    <div class="dropdown">
-      <a data-toggle="dropdown" data-target="#" data-controller="links" data-action="links#click" href="javascript:void(0);">
-        <i class="icon-users"></i>表示切り替え
-      </a>
-      <div class="dropdown-menu">
-        <div class="dropdown-menu-inner">
-          <a data-controller="links" data-action="links#click" href="#"><i class="icon-users"></i>Team Member Grid</a>
-          <a data-controller="links" data-action="links#click" href="#"><i class="icon-flag"></i>Position Grid</a>
-          <a data-controller="links" data-action="links#click" href="#"><i class="icon-map-marker-alt"></i>Location Grid</a>
-          <a data-controller="links" data-action="links#click" href="#"><i class="icon-calendar-alt"></i>Calendar</a>
-          <a data-controller="links" data-action="links#click" href="#"><i class="icon-list"></i>List</a>
+<div class="page-controls loading-hidden">
+  <div class="center-controls">
+    <div class="page-title">あなたの打刻履歴</div>
+    <div class="date-range-picker btn-group" data-controller="date-range-picker">
+      <a data-action="date-range-picker#previous links#click" data-controller="links" class="btn btn-default" href="javascript:void(0);"><i class="fas fa-angle-left"></i></a>
+      <a class="picker btn btn-default" data-target="date-range-picker.picker" data-controller="links" data-action="links#click" href="javascript:void(0);"><i class="fas fa-calendar-alt"></i><span data-target="date-range-picker.pickerText"></span></a>
+      <div class="dropdown">
+        <a data-toggle="dropdown" data-target="#" data-controller="links" data-action="links#click" class="btn btn-default" href="javascript:void(0);"><%= @current.term == :week ? '週単位' : '月単位' %></a>
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-inner">
+            <a data-controller="links" data-action="links#click" href="/shifts/?term=week">週単位</a>
+            <a data-controller="links" data-action="links#click" href="/shifts/?term=month">月単位</a>
+          </div>
         </div>
       </div>
+      <a data-action="date-range-picker#next links#click" data-controller="links" class="btn btn-default" href="javascript:void(0);"><i class="fas fa-angle-right"></i></a>
     </div>
-  </div>
 
-  <div class="filter-collections">
-    <a href="/timeframes/"><i class="icon-filter"></i>履歴をみる</a>
   </div>
 </div>
 

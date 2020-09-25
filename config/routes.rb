@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     :index,
   ]
   scope :timeframes, as: :timeframes do
+    get "/" => "timeframes#index"
     post "update" => "timeframes#update"
   end
 end
