@@ -27,11 +27,9 @@ export default class extends Controller {
       alwaysShowCalendars: true,
       opens: 'center',
     }).data('daterangepicker')
-    window.aaa = this.picker
 
     this._setPickerText()
     this._setTermText()
-    this._addTodayHeader()
 
     $(this.pickerTarget).on('apply.daterangepicker', event => { 
       this._applyPicker() 
@@ -45,11 +43,13 @@ export default class extends Controller {
       this._toggleShowClass(false)
     })
 
+    $(this.picker.container).prepend(`<div class='today-header'><a href='javascript:void(0);' class='today'>本日へ</a></div>`)
     $(this.picker.container).on('click', event => {
       if ($(event.target).is(this.picker.container) || $(event.target).hasClass('today')) {
         this.picker.hide()
       }
     })
+    this._updateGoTodayHref()
   }
 
   _setPickerText() {
@@ -68,16 +68,19 @@ export default class extends Controller {
   termWeek() {
     this.term = "week"
     this._setTermText()
+    this._updateGoTodayHref()
   }
 
   termMonth() {
     this.term = "month"
     this._setTermText()
+    this._updateGoTodayHref()
   }
 
   termCustom() {
     this.term = "custom"
     this._setTermText()
+    this._updateGoTodayHref()
   }
 
   _setTermText() {
@@ -121,24 +124,25 @@ export default class extends Controller {
     this._shiftRange(false)
   }
 
-  _addTodayHeader() {
+  _updateGoTodayHref() {
     const uri = new URI(window.location)
-    let term = this._term && this._term || 'month'
     let href = ""
     if (this._term == "custom") {
       href = uri.setQuery({
         start_date: moment().format('YYYY-MM-DD'),
         end_date: moment().add(this._termEndDate.diff(this._termStartDate, 'day'), 'day').format('YYYY-MM-DD'),
-        target_date: moment().format('YYYY-MM-DD')
+        target_date: moment().format('YYYY-MM-DD'),
+        term: this._term
       }).href()
     } else {
       href = uri.setQuery({
         start_date: moment().startOf(this._term).format('YYYY-MM-DD'),
         end_date: moment().endOf(this._term).format('YYYY-MM-DD'),
-        target_date: moment().format('YYYY-MM-DD')
+        target_date: moment().format('YYYY-MM-DD'),
+        term: this._term
       }).href()
     }
-    $(this.picker.container).prepend(`<div class='today-header'><a href='${href}' class='today'>本日へ</a></div>`)
+    $(this.picker.container).find(".today-header > a").attr("href", href)
   }
 
   _applyPicker() {
