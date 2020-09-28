@@ -1,3 +1,4 @@
 <div data-controller="stores">
   <span data-target="stores.current" data-json="<%= @current.to_h.to_json %>"></span>
+  <span data-target="stores.holidays" data-json="<%= Holidays.between(1.years.ago.beginning_of_month, 1.years.after.end_of_month, :jp).to_json %>"></span>
 </div>

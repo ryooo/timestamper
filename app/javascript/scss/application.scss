@@ -3224,6 +3224,7 @@ textarea.form-control {
   font-size: .95em;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: 400;
 
   > span {
     &:not(:last-child):after {
@@ -3346,7 +3347,7 @@ body {
     background: #7d8c9f;
   }
 
-  .heading, .details {
+  .heading {
     margin-left: .85em;
   }
 
@@ -7262,5 +7263,25 @@ body.hide-shifts .shift-summary {
   .blue {color: var(--blue) !important;}
   .holiday-name {
     font-size: 11px;
+  }
+}
+
+
+/* 日曜日のカラー設定 */
+.datepicker, .calendar-table {
+  td.holiday:not(.active) {
+    background-color: #ffecec;
+    color: #f00!important;
+  }
+  td.weekend:first-child:not(.active) {
+    background-color: #ffecec;
+    color: #f00!important;
+  }
+  td.weekend:last-child:not(.active):not(.holiday) {
+    background-color: #eaeaff;
+    color: #00f!important;
+  }
+  td.weekend:not(.active) {
+    opacity: 0.8;
   }
 }

@@ -26,6 +26,9 @@ export default class extends Controller {
       }, 
       alwaysShowCalendars: true,
       opens: 'center',
+      isCustomDate: function(date) {
+        return _.includes(holidays, date.format("YYYY-MM-DD")) ? "holiday" : false
+      },
     }).data('daterangepicker')
 
     this._setPickerText()
@@ -105,15 +108,15 @@ export default class extends Controller {
 
   get _term() {
     if (this.term) return this.term
-    return current.dateRange.term
+    return current.date_range.term
   }
 
   get _termStartDate() {
-    return moment(current.dateRange.term_start_date)
+    return moment(current.date_range.term_start_date)
   }
 
   get _termEndDate() {
-    return moment(current.dateRange.term_end_date)
+    return moment(current.date_range.term_end_date)
   }
 
   next() {
@@ -200,16 +203,16 @@ export default class extends Controller {
   }
 
   get _targetDate() {
-    return moment(current.dateRange.target_date)
+    return moment(current.date_range.target_date)
   }
 
 
   get _startDate() {
-    return moment(current.dateRange.start_date)
+    return moment(current.date_range.start_date)
   }
 
   get _endDate() {
-    return moment(current.dateRange.end_date)
+    return moment(current.date_range.end_date)
   }
 
   get _limit() {

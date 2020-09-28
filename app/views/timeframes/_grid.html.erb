@@ -25,9 +25,10 @@
                 <a data-controller="timeframe-cell" data-action="timeframe-cell#showTimeframeModal" data-timeframe-cell-json="<%= timeframe.to_modal_hash(current_user).to_json %>" class="editable schedule-cell normal" style="display:grid;<%= timeframe_style(timeframe, date) %>">
                   <i class="color-border" style="background:#8a8a48"></i>
                   <div class="heading">
-                    <div class="title"><%= "#{timeframe.in_at.to_s(:hm)} - #{timeframe.out_at.nil? ? "継続" : timeframe.out_at.to_s(:hm)}" %></div>
+                    <div class="title"><%= "#{timeframe.in_at.to_s(:hm)} - #{timeframe.out_at.nil? ? "継続" : timeframe.out_at.to_s(:hm)}" %>
+                      <div class="details"><%= timeframe.memo %></div>
+                    </div>
                   </div>
-                  <div class="details"></div>
                 </a>
               <% end %>
             </div>

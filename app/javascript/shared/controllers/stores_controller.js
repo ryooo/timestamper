@@ -1,19 +1,20 @@
 import { Controller } from 'stimulus'
 import { action, computed, observable } from 'mobx'
-import Current from 'shared/stores/current'
 
 export default class extends Controller {
   static targets = [
     'current',
+    'holidays',
   ]
   connect() {
     if (this.hasCurrentTarget) {
-      window.current.setJson(JSON.parse(this.currentTarget.dataset["json"]))
+      window.current = JSON.parse(this.currentTarget.dataset["json"])
+    }
+    if (this.hasHolidaysTarget) {
+      window.holidays = _.map(JSON.parse(this.holidaysTarget.dataset["json"]), 'date')
     }
   }
 }
-
-window.current = new Current
 
 window.resetStores = () => {
 }
