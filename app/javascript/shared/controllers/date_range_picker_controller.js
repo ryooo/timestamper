@@ -124,11 +124,20 @@ export default class extends Controller {
   _addTodayHeader() {
     const uri = new URI(window.location)
     let term = this._term && this._term || 'month'
-    const href = uri.setQuery({
-      start_date: moment().startOf(term).format('YYYY-MM-DD'),
-      end_date: moment().endOf(term).format('YYYY-MM-DD'),
-      target_date: moment().format('YYYY-MM-DD')
-    }).href()
+    let href = ""
+    if (this._term == "custom") {
+      href = uri.setQuery({
+        start_date: moment().format('YYYY-MM-DD'),
+        end_date: moment().add(this._termEndDate.diff(this._termStartDate, 'day'), 'day').format('YYYY-MM-DD'),
+        target_date: moment().format('YYYY-MM-DD')
+      }).href()
+    } else {
+      href = uri.setQuery({
+        start_date: moment().startOf(this._term).format('YYYY-MM-DD'),
+        end_date: moment().endOf(this._term).format('YYYY-MM-DD'),
+        target_date: moment().format('YYYY-MM-DD')
+      }).href()
+    }
     $(this.picker.container).prepend(`<div class='today-header'><a href='${href}' class='today'>本日へ</a></div>`)
   }
 
@@ -171,13 +180,14 @@ export default class extends Controller {
   }
 
   _shiftRange(add) {
-    let step = this._term ? 1 : (this._termEndDate.diff(this._termStartDate, 'day') + 1)
-    step = add ? step : -step
-    if (this._term) {
+    let step = add ? 1 : -1
+    if (this._term == "custom") {
+      step *= (this._termEndDate.diff(this._termStartDate, 'day') + 1)
+      let startDate = this._termStartDate.clone().add(step, 'days')
+      this._reload(startDate, this._termEndDate.clone().add(step, 'days'), startDate)
+    } else {
       let startDate = this._termStartDate.clone().add(step, this._term).startOf(this._term)
       this._reload(startDate, startDate.clone().endOf(this._term), startDate)
-    } else {
-      this._reload(this._termStartDate.clone().add(step, 'days'), this._termEndDate.clone().add(step, 'days'), startDate)
     }
   }
 

@@ -5442,7 +5442,7 @@ body {
     .grid-header {
       position: -webkit-sticky;
       position: sticky;
-      top: 65px;
+      top: 155px;
       display: flex;
       z-index: 995;
       box-shadow: 0 3px 2px -2px rgba(0, 0, 0, 0.05);
@@ -5603,9 +5603,11 @@ body {
   position: sticky;
   left: 0;
   z-index: 999;
-  margin: var(--page-padding) 0 0;
-  padding: 0 var(--page-padding);
+  margin: 0;
+  padding: 15px var(--page-padding) 0;
   flex: 0 0 auto;
+  background: white;
+  top: 55px;
 
   .left-controls {
     display: flex;

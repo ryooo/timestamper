@@ -1,6 +1,14 @@
 
-<div class="page-filters" data-controller="page-filters">
-  <div class="rendition-types">
+<%= form_with(
+  url: timeframes_path,
+  id: "main-form",
+  class: "page-controls",
+  data: {
+    controller: "forms",
+    action: "forms#submit ajax:error->forms#ajaxError ajax:success->forms#ajaxSuccess",
+  },
+) do |f| %>
+  <div class="left-controls">
     <div class="dropdown">
       <a data-toggle="dropdown" data-target="#" data-controller="links" data-action="links#click" href="javascript:void(0);">
         <i class="icon-users"></i>表示切り替え
@@ -17,7 +25,30 @@
     </div>
   </div>
 
-  <div class="filter-collections">
-    <a href="/timeframes/"><i class="icon-filter"></i>履歴をみる</a>
+  <div class="center-controls">
+    <div class="page-title">あなたの打刻履歴</div>
+    <div class="btn-group" data-controller="date-range-picker">
+      <input data-target="date-range-picker.hiddenInput" type="hidden" value="<%= @current.target_date.to_s(:y_m_d) %>">
+
+      <a data-action="date-range-picker#previous" class="btn btn-default" href="javascript:void(0);"><i class="fas fa-angle-left"></i></a>
+      <a class="picker btn btn-default" data-target="date-range-picker.picker" href="javascript:void(0);"><i class="fas fa-calendar-alt"></i><span data-target="date-range-picker.pickerText"></span></a>
+      <div class="dropdown">
+        <a data-toggle="dropdown" class="btn btn-default" href="javascript:void(0);" data-target="date-range-picker.termText"></a>
+        <div class="dropdown-menu">
+          <div class="dropdown-menu-inner">
+            <a data-action="date-range-picker#termWeek" href="javascript:void(0);">週単位</a>
+            <a data-action="date-range-picker#termMonth" href="javascript:void(0);">月単位</a>
+            <a data-action="date-range-picker#termCustom" href="javascript:void(0);">自由な日付範囲</a>
+          </div>
+        </div>
+      </div>
+      <a data-action="date-range-picker#next" class="btn btn-default" href="javascript:void(0);"><i class="fas fa-angle-right"></i></a>
+    </div>
   </div>
-</div>
+
+  <div class="right-controls">
+    <div class="filter-collections">
+      <a href="/timeframes/"><i class="icon-filter"></i>履歴をみる</a>
+    </div>
+  </div>
+<% end %>
