@@ -2,55 +2,61 @@ import { Controller } from "stimulus"
 import 'tempusdominus-bootstrap-4';
 
 export default class extends Controller {
-  id = null
-  input = null
-  hiddenInput = null
+  static targets = ['input', 'hiddenInput']
 
   initialize() {
-    this.id = 'date-field-' + _.random(0, 1000000)
-    jQuery(this.element).attr('id', this.id).attr("data-target-input", "nearest");
-    this.input = jQuery(this.element).find("> input[type='text']")
-    this.input.data("target", "#" + this.id)
-    this.input.addClass("datetimepicker-input")
-    this.input.attr("data-toggle", "datetimepicker")
-    this.hiddenInput = jQuery(this.element).find("> input[type='hidden']")
+    this.picker = $(this.element).daterangepicker({
+      startDate: moment(this._$inputTarget.val()),
+      singleDatePicker: true,
+      autoApply: true,
+      locale: {
+        applyLabel: '選択',
+        cancelLabel: 'クリア',
+        fromLabel: '開始日',
+        toLabel: '終了日',
+        weekLabel: 'W',
+        customRangeLabel: '自分で指定',
+        daysOfWeek: moment.weekdaysMin(),
+        monthNames: moment.monthsShort(),
+        firstDay: moment.localeData()._week.dow
+      }, 
+      alwaysShowCalendars: true,
+      opens: 'center',
+      isCustomDate: function(date) {
+        return _.includes(holidays, date.format("YYYY-MM-DD")) ? "holiday" : false
+      },
+    }).data('daterangepicker')
 
-    jQuery("#" + this.id).datetimepicker({
-        dayViewHeaderFormat: 'YYYY年 M月',
-        tooltips: {
-            close: '閉じる',
-            pickHour: '時間を取得',
-            incrementHour: '時間を増加',
-            decrementHour: '時間を減少',
-            pickMinute: '分を取得',
-            incrementMinute: '分を増加',
-            decrementMinute: '分を減少',
-            pickSecond: '秒を取得',
-            incrementSecond: '秒を増加',
-            decrementSecond: '秒を減少',
-            togglePeriod: '午前/午後切替',
-            selectTime: '時間を選択'
-        },
-        format: 'YYYY / M / D (ddd)',
-        locale: 'ja',
-        buttons: {
-            showClose: true
-        }
-    })
-    if (this.input.val() != "") {
-      this.cp2HiddenInput(moment(this.input.val()))
+    if (this._$inputTarget.val() != "") {
+      this._updateInputsValue(moment(this._$inputTarget.val()))
     }
 
-    jQuery("#" + this.id).on('show.datetimepicker', event => {
-      jQuery(event.target).find("> div.bootstrap-datetimepicker-widget").css("top", "40px")
+    $(this.element).on('apply.daterangepicker', event => {
+      this._updateInputsValue(moment(this.picker.startDate.clone()))
     })
-
-    jQuery("#" + this.id).on('change.datetimepicker', event => {
-      this.cp2HiddenInput(event.date)
+    this._$inputTarget.on('focusout', event => {
+      let str = event.target.value
+      let m = moment(str.replace(/\s+/g, "").split("(")[0])
+      if (m.isValid()) {
+        this._updateInputsValue(m)
+        this.picker.startDate = m
+        this.picker.endDate = m
+        this.picker.hide()
+      }
     })
   }
 
-  cp2HiddenInput(date) {
-    this.hiddenInput.val(date.format("YYYY-MM-DD"))
+  _updateInputsValue(date) {
+    date.locale("ja")
+    this._$inputTarget.val(date.format("YYYY / M / D (dd)"))
+    this._$hiddenInputTarget.val(date.format("YYYY-MM-DD"))
+  }
+
+  get _$inputTarget() {
+    return $(this.inputTarget)
+  }
+
+  get _$hiddenInputTarget() {
+    return $(this.hiddenInputTarget)
   }
 }
