@@ -10,7 +10,7 @@ class Current
       when :scope
         @values[key] = [:organization, :location, :user].include?(v&.to_sym) ? v : nil
       when :term
-        @values[key] = [:month, :week].include?(v&.to_sym) ? v : nil
+        @values[key] = [:month, :week, :custom].include?(v&.to_sym) ? v : nil
       when :target_date
         @values[key] = Date.parse(v).to_s(:y_m_d) rescue Date.today.to_s(:y_m_d)
       when :start_date
@@ -57,8 +57,8 @@ class Current
 
   def term_start_date
     case self.term
-    when :day
-      target_date
+    when :custom
+      start_date
     when :week
       (target_date + 1.day).beginning_of_week - 1.day
     else
@@ -68,8 +68,8 @@ class Current
 
   def term_end_date
     case self.term
-    when :day
-      target_date
+    when :custom
+      end_date
     when :week
       (target_date + 1.day).end_of_week - 1.day
     else
