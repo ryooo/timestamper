@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   before_create :generate_code
 
   validates_presence_of :name
-  validates_length_of :name, maximum: 10
+  validates_length_of :name, maximum: 30
 
   with_options on: :create_loginable_user do |registration|
     registration.validates_presence_of :email
@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
   end
 
   def organization
-    @organization ||= Organization.find_by(code: self.organization_code)
+    @organization ||= Organization.find_by(id: self.organization_id)
   end
 
   def generate_code
@@ -45,5 +45,25 @@ class User < ActiveRecord::Base
     else
       raise "find_for_authentication condition error: #{warden_conditions}"
     end
+  end
+
+  def to_hash
+    {
+      id: self.id,
+      organization_name: self.organization.name,
+      user_name: self.name,
+      user_type_name: self.user_type.name,
+      email: self.email,
+    }
+  end
+
+  def self.data_table_columns
+    [
+      { title: :"ID", data: :id, searchable: false},
+      { title: :"組織名", data: :organization_name, },
+      { title: :"名前", data: :user_name, },
+      { title: :"タイプ", data: :user_type_name, },
+      { title: :"メールアドレス", data: :email, },
+    ]
   end
 end

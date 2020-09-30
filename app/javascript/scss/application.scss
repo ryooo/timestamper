@@ -8,6 +8,7 @@ $fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
 @import '~@fortawesome/fontawesome-free/scss/fontawesome';
 @import '~@fortawesome/fontawesome-free/scss/solid';
 
+
 .daterangepicker {
   position: absolute;
   color: inherit;
@@ -7286,11 +7287,11 @@ body.hide-shifts .shift-summary {
   }
 }
 
-.datatable {
+table.dataTable {
   thead th {
     position: -webkit-sticky;
     position: sticky;
-    top: 94px;
+    top: 95px;
     background: white;
     border: none;
   }
@@ -7309,4 +7310,19 @@ body.hide-shifts .shift-summary {
   tbody tr:first-child td {
       border-top: none;
   }
+
+  tbody td a.operation-btn {
+    margin-right: 12px;
+    i {
+      font-size: 14px;
+    }
+  }
+}
+
+.dataTables_paginate .pagination .paginate_button {
+  padding: 0;
+}
+
+table.dataTable.no-footer {
+  border-bottom: 1px solid #dee2e6;
 }

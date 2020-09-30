@@ -9,3 +9,13 @@ while time < Time.current
     out_at: (time += (1..300).to_a.sample.minutes),
   )
 end
+
+Timeframe.connection.execute "DELETE FROM users where name like 'テストユーザー%';"
+200.times do |i|
+  User.create!(
+    organization_id: current_user.organization_id,
+    name: "テストユーザー #{i}",
+    email: "hogehoge@gmail"
+  )
+end
+
