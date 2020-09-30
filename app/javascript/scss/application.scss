@@ -5443,7 +5443,7 @@ body {
     .grid-header {
       position: -webkit-sticky;
       position: sticky;
-      top: 155px;
+      top: 145px;
       display: flex;
       z-index: 995;
       box-shadow: 0 3px 2px -2px rgba(0, 0, 0, 0.05);
@@ -5608,7 +5608,7 @@ body {
   padding: 15px var(--page-padding) 0;
   flex: 0 0 auto;
   background: white;
-  top: 55px;
+  top: 45px;
 
   .left-controls {
     display: flex;
@@ -7267,7 +7267,7 @@ body.hide-shifts .shift-summary {
 }
 
 
-/* 日曜日のカラー設定 */
+
 .datepicker, .calendar-table {
   td.holiday:not(.active) {
     background-color: #ffecec;
@@ -7283,5 +7283,30 @@ body.hide-shifts .shift-summary {
   }
   td.weekend:not(.active) {
     opacity: 0.8;
+  }
+}
+
+.datatable {
+  thead th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 94px;
+    background: white;
+    border: none;
+  }
+
+  thead th:before{
+      content : "" ;
+      position : absolute ;
+      top : 0 ;
+      left : 0 ;
+      width : 100% ;
+      height : 100% ;
+      border-top: 1px solid #dee2e6;
+      border-bottom: 1px solid #dee2e6;
+  }
+
+  tbody tr:first-child td {
+      border-top: none;
   }
 }

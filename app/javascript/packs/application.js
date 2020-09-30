@@ -10,6 +10,8 @@ require('../shared/initializers/moment_initializer.js');
 require('../shared/initializers/turbolinks_initializer.js');
 require('../shared/initializers/tooltip_initializer.js');
 
+window.$ = jQuery
+
 import { Application } from 'stimulus'
 import { definitionsFromContext } from 'stimulus/webpack-helpers'
 const application = Application.start()

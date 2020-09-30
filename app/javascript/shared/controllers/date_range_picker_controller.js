@@ -72,18 +72,21 @@ export default class extends Controller {
     this.term = "week"
     this._setTermText()
     this._updateGoTodayHref()
+    this.picker.show()
   }
 
   termMonth() {
     this.term = "month"
     this._setTermText()
     this._updateGoTodayHref()
+    this.picker.show()
   }
 
   termCustom() {
     this.term = "custom"
     this._setTermText()
     this._updateGoTodayHref()
+    this.picker.show()
   }
 
   _setTermText() {
