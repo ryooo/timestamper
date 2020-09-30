@@ -1,5 +1,5 @@
 <%= form_with(
-  url: timeframes_path,
+  url: users_path,
   id: "main-form",
   class: "page-controls",
   data: {
@@ -25,12 +25,10 @@
   </div>
 
   <div class="center-controls">
-    <div class="page-title">あなたの打刻履歴</div>
+    <div class="page-title">スタッフ一覧</div>
   </div>
 
   <div class="right-controls">
-    <div class="filter-collections">
-      <a href="/timeframes/"><i class="icon-filter"></i>履歴をみる</a>
-    </div>
+    <label>絞り込み :&nbsp;</label><input id="data-tables-filter-input" type="search" class="form-control-sm">
   </div>
 <% end %>

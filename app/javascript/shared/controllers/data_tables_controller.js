@@ -28,12 +28,20 @@ export default class extends Controller {
             },
           },
         ]),
-        dom: '<f<t>ip>',
+        dom: '<<t>ip>',
         language: {
             url: "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Japanese.json"
         },
       },
     )
+
+    $("#data-tables-filter-input").on('keyup', event => { 
+      this.filterRows(event)
+    })
+  }
+
+  filterRows(event) {
+    this._table.fnFilter($(event.target).val());
   }
 
   editRow(event) {
