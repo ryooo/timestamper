@@ -1,16 +1,16 @@
 module Jsonp
-  class ShowModal
-    attr_accessor :html
-    def initialize(html)
-      @html = html
+  class PatchDataTables
+    attr_accessor :operations
+    def initialize(operations)
+      @operations = operations
     end
     
     def render
       {
         json: {
-          html: @html,
+          operations: @operations,
         }.to_json,
-        callback: :showModal,
+        callback: :patchDataTables,
       }
     end
   end

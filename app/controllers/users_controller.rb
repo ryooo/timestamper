@@ -9,13 +9,29 @@ class UsersController < ApplicationController
   end
 
   def update
-    user = User.find(params[:id])
-    user.name = params[:name].strip_all_space_and_empty_to_nil
-    user.email = params[:email].strip_all_space_and_empty_to_nil
-    user.save
-    render_jsonps([
-      Jsonp::ShowModal.new(render_to_string(layout: nil)),
-    ])
+    if user = User.find(params[:user][:id])
+      user.name = params[:user][:name].strip_all_space_and_empty_to_nil
+      user.email = params[:user][:email].strip_all_space_and_empty_to_nil
+      user.save!
+      render_jsonps([
+        Jsonp::PatchDataTables.new([
+          {operation: 'update', data: user.to_hash},
+        ]),
+        Jsonp::AddFlashMessage.new("保存しました。", :notice),
+      ])
+    end
+  end
+
+  def delete
+    if user = User.find(params[:user][:id])
+      user.destroy!
+      render_jsonps([
+        Jsonp::PatchDataTables.new([
+          {operation: 'delete', data: user.to_hash},
+        ]),
+        Jsonp::AddFlashMessage.new("削除しました。", :notice),
+      ])
+    end
   end
 
   def show

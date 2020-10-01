@@ -7,7 +7,7 @@
     action: "forms#submit ajax:error->forms#ajaxError ajax:success->forms#ajaxSuccess",
   },
 ) do |f| %>
-  <div class="left-controls">&nbsp;
+  <div class="left-controls">&nbsp;aa
   </div>
 
   <div class="center-controls">
@@ -15,6 +15,8 @@
   </div>
 
   <div class="right-controls">
-    <input id="data-tables-filter-input" type="search" placeholder="絞り込み" class="form-control-sm mr-2">
+    <input id="data-tables-filter-input" type="text" placeholder="絞り込み" class="form-control-sm mr-2">
+    <%# Enterキーでpostされないようにダミーを追加 %>
+    <input type="text" name="dummy" style="display:none;">
   </div>
 <% end %>

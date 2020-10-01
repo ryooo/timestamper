@@ -54,9 +54,9 @@ export default class extends Controller {
   }
 
   showEditModal(event) {
-    let id = parseInt(event.target.dataset.id)
+    let id = parseInt(event.currentTarget.dataset.id)
     let row = this._dataset.find(r => r.id == id)
-    let compiled = _.template($("#" + this.data.get("modal-id")).html());
+    let compiled = _.template($("#" + this.data.get("update-modal-id")).html());
     showModal({
       type: 'popup',
       html: compiled(row),
@@ -64,17 +64,31 @@ export default class extends Controller {
   }
 
   deleteRow(event) {
-    console.log("deleteRow")
+    let id = parseInt(event.currentTarget.dataset.id)
+    let row = this._dataset.find(r => r.id == id)
+    let compiled = _.template($("#" + this.data.get("delete-modal-id")).html());
+    showModal({
+      type: 'popup',
+      html: compiled(row),
+    })
+  }
+
+  patchDataset(h) {
+    this._dataset = this._dataset.filter(row => row.id !== h.data.id)
+    if (h.operation == "update") {
+      this._dataset = this._dataset.concat(h.data)
+      this._datatables.fnUpdate(h.data, $("#datatables-row-" + h.data.id))
+    } else if (h.operation == "delete") {
+      this._datatables.fnDeleteRow($("#datatables-row-" + h.data.id))
+    }
   }
 }
 
-window.patchDataTables = function (rows) {
-  let dt = findController("data-tables")._datatables
-  if (dt) {
-    for (let r of rows) {
-      if (r.operation == "update") {
-        dt.fnUpdate(r.data, $("#datatables-row-" + r.data.id))
-      }
+window.patchDataTables = function (json) {
+  let controller = findController("data-tables")
+  if (controller) {
+    for (let h of json.operations) {
+      controller.patchDataset(h)
     }
   }  
 }

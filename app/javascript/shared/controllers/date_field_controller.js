@@ -34,7 +34,7 @@ export default class extends Controller {
     $(this.element).on('apply.daterangepicker', event => {
       this._updateInputsValue(moment(this.picker.startDate.clone()))
     })
-    this._$inputTarget.on('focusout', event => {
+    this._$inputTarget.on('change', event => {
       let str = event.target.value
       let m = moment(str.replace(/\s+/g, "").split("(")[0])
       if (m.isValid()) {

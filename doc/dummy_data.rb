@@ -1,4 +1,4 @@
-current_user = User.last
+current_user = User.first
 Timeframe.connection.execute "TRUNCATE TABLE timeframes;"
 time = Time.current - 30.days
 while time < Time.current

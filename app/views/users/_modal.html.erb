@@ -1,4 +1,4 @@
-<template id="user-show-modal-template">
+<template id="user-update-modal-template">
   <%= form_with(
   url: users_update_path,
   id: "modal-form",
@@ -60,6 +60,31 @@
 
     <div class="modal-footer space-between">
       <button name="user[save]" value="true" type="submit" class="btn btn-blue" data-target="forms.submitButton">保存</button>
+    </div>
+  <% end %>
+</template>
+
+
+<template id="user-delete-confirm-modal-template">
+  <%= form_with(
+  url: users_delete_path,
+  id: "modal-form",
+  data: {
+    controller: "forms",
+    action: "forms#submit ajax:error->forms#ajaxError ajax:success->forms#ajaxSuccess",
+  }) do |f| %>
+    <div class="modal-header" data-target="forms.refreshWrapper">確認</div>
+
+    <div class="modal-body">
+      <div>
+        <input name="user[id]" type="hidden" value="${ id }">
+        「${ name }」のデータを本当に削除してもよろしいでしょうか？
+      </div>
+    </div>
+
+    <div class="modal-footer space-between">
+      <a class="btn btn-default" data-action="modals#close" href="javascript:void(0);">削除しない</a>
+      <button value="true" type="submit" class="btn btn-danger" data-target="forms.submitButton">削除する</button>
     </div>
   <% end %>
 </template>

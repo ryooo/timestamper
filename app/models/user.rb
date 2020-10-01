@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
     {
       id: self.id,
       organization_name: self.organization.name,
-      user_name: self.name,
+      name: self.name,
       user_type_name: self.user_type.name,
       email: self.email,
     }
@@ -61,7 +61,7 @@ class User < ActiveRecord::Base
     [
       { title: :"ID", data: :id, searchable: false},
       { title: :"組織名", data: :organization_name, },
-      { title: :"名前", data: :user_name, },
+      { title: :"名前", data: :name, },
       { title: :"タイプ", data: :user_type_name, },
       { title: :"メールアドレス", data: :email, },
     ]

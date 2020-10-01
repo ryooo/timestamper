@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     get "/" => "users#index"
     get "/:id" => "users#show"
     post "update" => "users#update"
+    post "delete" => "users#delete"
   end
   scope :dashboard, as: :dashboard do
     get "index" => "dashboard#index"

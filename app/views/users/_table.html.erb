@@ -1,4 +1,4 @@
-<div class="page-body" data-controller="data-tables" data-data-tables-columns-json="<%= User.data_table_columns.to_json %>" data-data-tables-dataset-json="<%= User.all.map(&:to_hash).to_json %>" data-data-tables-modal-id="user-show-modal-template">
+<div class="page-body" data-controller="data-tables" data-data-tables-columns-json="<%= User.data_table_columns.to_json %>" data-data-tables-dataset-json="<%= User.all.map(&:to_hash).to_json %>" data-data-tables-update-modal-id="user-update-modal-template" data-data-tables-delete-modal-id="user-delete-confirm-modal-template">
   <table data-target="data-tables.table" class="table table-striped dataTable" style="width:100%"></table>
 </div>
 
