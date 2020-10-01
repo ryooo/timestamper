@@ -7,21 +7,7 @@
     action: "forms#submit ajax:error->forms#ajaxError ajax:success->forms#ajaxSuccess",
   },
 ) do |f| %>
-  <div class="left-controls">
-    <div class="dropdown">
-      <a data-toggle="dropdown" data-target="#" data-controller="links" data-action="links#click" href="javascript:void(0);">
-        <i class="icon-users"></i>表示切り替え
-      </a>
-      <div class="dropdown-menu">
-        <div class="dropdown-menu-inner">
-          <a data-controller="links" data-action="links#click" href="#"><i class="icon-users"></i>Team Member Grid</a>
-          <a data-controller="links" data-action="links#click" href="#"><i class="icon-flag"></i>Position Grid</a>
-          <a data-controller="links" data-action="links#click" href="#"><i class="icon-map-marker-alt"></i>Location Grid</a>
-          <a data-controller="links" data-action="links#click" href="#"><i class="icon-calendar-alt"></i>Calendar</a>
-          <a data-controller="links" data-action="links#click" href="#"><i class="icon-list"></i>List</a>
-        </div>
-      </div>
-    </div>
+  <div class="left-controls">&nbsp;
   </div>
 
   <div class="center-controls">
@@ -29,6 +15,6 @@
   </div>
 
   <div class="right-controls">
-    <label>絞り込み :&nbsp;</label><input id="data-tables-filter-input" type="search" class="form-control-sm">
+    <input id="data-tables-filter-input" type="search" placeholder="絞り込み" class="form-control-sm mr-2">
   </div>
 <% end %>

@@ -11,11 +11,11 @@ Rails.application.routes.draw do
     get "sign_out", to: "users/sessions#destroy" 
   end
 
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  resources :users, only: [
-    :index,
-    :edit,
-  ]
+  scope :users, as: :users do
+    get "/" => "users#index"
+    get "/:id" => "users#show"
+    post "update" => "users#update"
+  end
   scope :dashboard, as: :dashboard do
     get "index" => "dashboard#index"
     get "stamp" => "dashboard#stamp"

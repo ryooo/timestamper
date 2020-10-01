@@ -5606,7 +5606,7 @@ body {
   left: 0;
   z-index: 999;
   margin: 0;
-  padding: 15px var(--page-padding) 0;
+  padding: 15px var(--page-padding) 5px;
   flex: 0 0 auto;
   background: white;
   top: 45px;
@@ -7291,7 +7291,7 @@ table.dataTable {
   thead th {
     position: -webkit-sticky;
     position: sticky;
-    top: 95px;
+    top: 101px;
     background: white;
     border: none;
   }
@@ -7313,6 +7313,7 @@ table.dataTable {
 
   tbody td a.operation-btn {
     margin-right: 12px;
+    font-size: 14px;
     i {
       font-size: 14px;
     }

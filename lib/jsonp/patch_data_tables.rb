@@ -1,5 +1,5 @@
 module Jsonp
-  class PatchDataTables
+  class ShowModal
     attr_accessor :html
     def initialize(html)
       @html = html
