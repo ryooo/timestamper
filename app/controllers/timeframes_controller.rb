@@ -1,4 +1,5 @@
 class TimeframesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_current, only: [:index]
 
   def index

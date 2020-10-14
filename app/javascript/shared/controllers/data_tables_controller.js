@@ -90,6 +90,6 @@ window.patchDataTables = function (json) {
     for (let h of json.operations) {
       controller.patchDataset(h)
     }
-  }  
+  }
 }
 
